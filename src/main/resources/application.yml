@@ -11,8 +11,15 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    log-request-details: true
 
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+server:
+  error:
+    include-stacktrace: always
