@@ -29,15 +29,16 @@ public class MemberApiController {
         return memberService.join(request);
     }
 
-    @ApiOperation(value="이메일 중복 체크")
-    @GetMapping("/member/checkDuplicate/{email}")
-    public boolean checkDuplicateByEmail(@PathVariable("email") String email){
-        return memberService.checkDuplicateByEmail(email);
-    }
 
     @ApiOperation(value="닉네임 중복 체크")
     @GetMapping("/member/checkDuplicate/{nickname}")
     public boolean checkDuplicateByNickname(@PathVariable("nickname") String nickname){
         return memberService.checkDuplicateByNickname(nickname);
+    }
+
+    @ApiOperation(value="이메일 중복 체크")
+    @GetMapping("/member/checkDuplicate/{email}")
+    public boolean checkDuplicateByEmail(@PathVariable("email") String email){
+        return memberService.checkDuplicateByEmail(email);
     }
 }

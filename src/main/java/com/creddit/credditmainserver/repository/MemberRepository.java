@@ -17,17 +17,6 @@ public class MemberRepository {
         return member.getId();
     }
 
-    public boolean checkDuplicateByNickname(String nickname){
-        try{
-            Member member=em.createQuery("select m from Member m where m.nickname = :nickname",Member.class)
-                    .setParameter("nickname",nickname)
-                    .getSingleResult();
-        }catch(NoResultException nre){
-            return false;
-        }
-        return true;
-    }
-
     public boolean checkDuplicateByEmail(String email){
         try{
             Member member=em.createQuery("select m from Member m where m.email = :email",Member.class)
@@ -35,6 +24,17 @@ public class MemberRepository {
                     .getSingleResult();
         }
         catch (NoResultException nre){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkDuplicateByNickname(String nickname){
+        try{
+            Member member=em.createQuery("select m from Member m where m.nickname = :nickname",Member.class)
+                    .setParameter("nickname",nickname)
+                    .getSingleResult();
+        }catch(NoResultException nre){
             return false;
         }
         return true;
