@@ -15,8 +15,13 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public boolean checkDuplicateMember(Member member){
-       return memberRepository.checkDuplicate(member);
+    public boolean checkDuplicateByEmail(String email){
+        return memberRepository.checkDuplicateByEmail(email);
+    }
+
+    @Transactional
+    public boolean checkDuplicateByNickname(String nickname){
+        return memberRepository.checkDuplicateByNickname(nickname);
     }
 
     @Transactional
