@@ -9,9 +9,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(tags = {"회원가입/로그인"})
 @RestController
@@ -29,5 +27,17 @@ public class MemberApiController {
     @PostMapping("/member/signup")
     public Long signUp(@RequestBody @Valid MemberRequest request){
         return memberService.join(request);
+    }
+
+    @ApiOperation(value="닉네임 중복 체크")
+    @GetMapping("/member/checkDuplicate/{nickname}")
+    public boolean checkDuplicateByNickname(@PathVariable("nickname") String nickname){
+        return memberService.checkDuplicateByNickname(nickname);
+    }
+
+    @ApiOperation(value="이메일 중복 체크")
+    @GetMapping("/member/checkDuplicate/{email}")
+    public boolean checkDuplicateByEmail(@PathVariable("email") String email){
+        return memberService.checkDuplicateByEmail(email);
     }
 }
