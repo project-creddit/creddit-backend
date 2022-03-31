@@ -21,7 +21,7 @@ public class Member {
 
     private String nickname;
 
-    private char delYN;
+    private boolean activated;
 
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
