@@ -32,7 +32,7 @@ public class MemberService {
         member.setPassword(encoder.encode(memberRequest.getPassword()));
         member.setEmail(memberRequest.getEmail());
         member.setNickname(memberRequest.getNickname());
-        member.setDelYN('N');
+        member.setActivated(true);
 
         return memberRepository.save(member);
     }

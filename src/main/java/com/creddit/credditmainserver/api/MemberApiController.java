@@ -40,4 +40,6 @@ public class MemberApiController {
     public boolean checkDuplicateByEmail(@PathVariable("email") String email){
         return memberService.checkDuplicateByEmail(email);
     }
+
+
 }
