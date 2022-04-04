@@ -1,17 +1,13 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: ''
-labels: ''
+title: 'Repository, Service 기본 기능 추가'
+labels: 'feature'
 assignees: ''
 
 ---
 
 ## Description
-자세한 feature 상황에 대해서 설명해주세요!!
-- 새롭게 반영될 사항
-- 새롭게 반영하는 이유
-
->
+- 새롭게 반영될 사항 : Repository, Service 저장, 수정, 삭제, ID 조회, 전체 글 조회 추가
+ 
 ## Reference
-- reference를 적어주세요!!
