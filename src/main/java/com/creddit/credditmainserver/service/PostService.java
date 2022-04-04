@@ -1,7 +1,8 @@
 package com.creddit.credditmainserver.service;
 
 import com.creddit.credditmainserver.domain.Post;
-import com.creddit.credditmainserver.dto.request.PostRequestDto;
+import com.creddit.credditmainserver.dto.request.PostSaveRequestDto;
+import com.creddit.credditmainserver.dto.request.PostUpdateRequestDto;
 import com.creddit.credditmainserver.dto.response.PostResponseDto;
 import com.creddit.credditmainserver.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,31 +12,33 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-@Transactional
 @RequiredArgsConstructor
+@Service
 public class PostService {
 
     private final PostRepository postRepository;
 
-    public Long save(PostRequestDto requestDto){
-        return postRepository.save(requestDto.toEntity()).getId();
+    @Transactional
+    public Long createPost(PostSaveRequestDto postSaveRequestDto){
+        return postRepository.save(postSaveRequestDto.toEntity()).getId();
     }
 
-    public Long update(Long id, PostRequestDto requestDto) {
+    @Transactional
+    public Long updatePost(Long id, PostUpdateRequestDto postUpdateRequestDto) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
 
-        post.updatePost(requestDto.getTitle(), requestDto.getContent(), requestDto.getImgName());
+        post.updatePost(postUpdateRequestDto.getTitle(), postUpdateRequestDto.getContent(), postUpdateRequestDto.getImgName());
 
         return id;
     }
 
-    public PostResponseDto findById(Long id) {
-        Post entity = postRepository.findById(id)
+    @Transactional
+    public void deletePost(Long id){
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
 
-        return new PostResponseDto(entity);
+        postRepository.delete(post);
     }
 
     public List<PostResponseDto> findAllPost(){
@@ -44,10 +47,10 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public void deletePost(Long id){
-        Post post = postRepository.findById(id)
+    public PostResponseDto findById(Long id) {
+        Post entity = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
 
-        postRepository.delete(post);
+        return new PostResponseDto(entity);
     }
 }

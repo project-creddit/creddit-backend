@@ -7,17 +7,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostRequestDto {
+public class PostSaveRequestDto {
 
+    @NotBlank
     private Member member;
+    @NotBlank
     private String title;
+    @NotBlank
     private String content;
     private String imgName;
 
     @Builder
-    public PostRequestDto(Member member, String title, String content, String imgName) {
+    public PostSaveRequestDto(Member member, String title, String content, String imgName) {
         this.member = member;
         this.title = title;
         this.content = content;
