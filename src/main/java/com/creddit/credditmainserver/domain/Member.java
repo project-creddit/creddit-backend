@@ -1,14 +1,17 @@
 package com.creddit.credditmainserver.domain;
 
+import com.creddit.credditmainserver.dto.response.MemberResponseDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class Member {
 
     @Id @GeneratedValue
@@ -23,6 +26,9 @@ public class Member {
 
     private boolean activated;
 
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
@@ -31,4 +37,14 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Like> likes = new ArrayList<>();
+
+    public static Member toEntity(String email, String password, String nickname, Authority authority, boolean activated) {
+        Member member= new Member();
+        member.setEmail(email);
+        member.setPassword(password);
+        member.setNickname(nickname);
+        member.setAuthority(authority);
+        member.setActivated(activated);
+        return member;
+    }
 }
