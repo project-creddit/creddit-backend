@@ -21,7 +21,6 @@ public class MemberApiController {
     @Operation(summary="회원가입 시 이메일 중복 체크",description="중복 시 return true, 중복 아닐 시 return false")
     @GetMapping("/checkDuplicateByEmail/{email}")
     public boolean checkDuplicateByEmail(@PathVariable String email){
-        System.out.println(email);
         return memberService.checkDuplicateByEmail(email);
     }
 
