@@ -8,17 +8,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class PostSaveRequestDto {
 
-    @NotBlank
+    @NotNull
     private Member member;
-    @NotBlank
+
+    @NotBlank(message = "제목은 빈 칸일 수 없습니다.")
     private String title;
-    @NotBlank
+
+    @NotBlank(message = "내용은 빈 칸일 수 없습니다.")
     private String content;
+
     private String imgName;
 
     @Builder

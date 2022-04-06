@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api(tags = {"글 작성/수정/삭제"})
@@ -34,8 +35,8 @@ public class PostApiController {
             @ApiImplicitParam(name = "content"),
             @ApiImplicitParam(name = "imgName")
     })
-    @PostMapping("/post/write")
-    public Long createPost(@RequestBody PostSaveRequestDto postSaveRequestDto){
+    @PostMapping("/post/create")
+    public Long createPost(@RequestBody @Valid PostSaveRequestDto postSaveRequestDto){
         return postService.createPost(postSaveRequestDto);
     }
 
@@ -47,7 +48,7 @@ public class PostApiController {
     }
 
     @ApiOperation(value = "글 수정")
-    @PutMapping("/post/{id}")
+    @PostMapping("/post/{id}/edit")
     public Long updatePost(@PathVariable Long id, @RequestBody PostUpdateRequestDto postUpdateRequestDto){
         return postService.updatePost(id, postUpdateRequestDto);
     }

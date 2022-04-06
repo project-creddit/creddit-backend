@@ -14,9 +14,15 @@ public class PostController {
 
     private final PostService postService;
 
-    @ApiOperation(value = "글 작성페이지 요청")
-    @GetMapping("/post/write")
+    @ApiOperation(value = "글 작성 페이지 요청")
+    @GetMapping("/post/create")
     public String createPostForm(){
+        return "";
+    }
+
+    @ApiOperation(value = "글 수정 페이지 요청")
+    @GetMapping("/post/{id}/edit")
+    public String updatePostForm(){
         return "";
     }
 }

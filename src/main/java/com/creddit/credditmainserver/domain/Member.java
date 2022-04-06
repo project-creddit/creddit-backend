@@ -29,15 +29,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToMany(mappedBy = "member")
-    private List<Post> posts = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Like> likes = new ArrayList<>();
-
     public static Member toEntity(String email, String password, String nickname, Authority authority, boolean activated) {
         Member member= new Member();
         member.setEmail(email);
