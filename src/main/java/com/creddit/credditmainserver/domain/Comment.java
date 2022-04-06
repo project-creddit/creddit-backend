@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 public class Comment extends BaseTimeEntity{
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
 
@@ -34,7 +34,7 @@ public class Comment extends BaseTimeEntity{
     @Column(columnDefinition = "bigint default 0")
     private Long likeCount;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "comment")
     private List<Like> likes = new ArrayList<>();
 
     @Builder
@@ -43,7 +43,6 @@ public class Comment extends BaseTimeEntity{
         this.post = post;
         this.content = content;
 
-        member.getComments().add(this);
         post.getComments().add(this);
     }
 

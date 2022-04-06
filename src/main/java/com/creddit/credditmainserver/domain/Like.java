@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Like {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
     private Long id;
 
@@ -38,7 +38,6 @@ public class Like {
         this.post = post;
         this.comment = comment;
 
-        member.getLikes().add(this);
         post.getLikes().add(this);
         comment.getLikes().add(this);
     }
