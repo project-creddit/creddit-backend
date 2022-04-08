@@ -11,6 +11,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        show-sql: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -20,6 +21,9 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
-server:
-  error:
-    include-stacktrace: always
+
+  jwt:
+    secret: Y3JlZGl0LXRlYW0tc3ByaW5nLWJvb3QtanBhLW15c3FsLXByb2plY3Qtc29jaWFsLW5ldHdvcmstc2VydmljZQo=
+
+
+
