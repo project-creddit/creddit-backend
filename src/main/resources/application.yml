@@ -22,8 +22,8 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
-  jwt:
-    secret: Y3JlZGl0LXRlYW0tc3ByaW5nLWJvb3QtanBhLW15c3FsLXByb2plY3Qtc29jaWFsLW5ldHdvcmstc2VydmljZQo=
+jwt:
+  secret: Y3JlZGl0LXRlYW0tc3ByaW5nLWJvb3QtanBhLW15c3FsLXByb2plY3Qtc29jaWFsLW5ldHdvcmstc2VydmljZQo=
 
 
 
