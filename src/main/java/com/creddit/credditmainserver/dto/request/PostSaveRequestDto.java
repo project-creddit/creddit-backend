@@ -15,9 +15,6 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class PostSaveRequestDto {
 
-    @NotNull
-    private Member member;
-
     @NotBlank(message = "제목은 빈 칸일 수 없습니다.")
     private String title;
 
@@ -27,14 +24,13 @@ public class PostSaveRequestDto {
     private String imgName;
 
     @Builder
-    public PostSaveRequestDto(Member member, String title, String content, String imgName) {
-        this.member = member;
+    public PostSaveRequestDto(String title, String content, String imgName) {
         this.title = title;
         this.content = content;
         this.imgName = imgName;
     }
 
-    public Post toEntity(){
+    public Post toEntity(Member member){
         return Post.builder()
                 .member(member)
                 .title(title)

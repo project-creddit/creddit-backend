@@ -1,9 +1,12 @@
 package com.creddit.credditmainserver.service;
 
+import com.creddit.credditmainserver.domain.Member;
 import com.creddit.credditmainserver.domain.Post;
 import com.creddit.credditmainserver.dto.request.PostSaveRequestDto;
 import com.creddit.credditmainserver.dto.request.PostUpdateRequestDto;
 import com.creddit.credditmainserver.dto.response.PostResponseDto;
+import com.creddit.credditmainserver.login.security.SecurityUtil;
+import com.creddit.credditmainserver.repository.MemberRepository;
 import com.creddit.credditmainserver.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +21,14 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public Long createPost(PostSaveRequestDto postSaveRequestDto){
-        return postRepository.save(postSaveRequestDto.toEntity()).getId();
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        Member member = memberRepository.getById(currentMemberId);
+
+        return postRepository.save(postSaveRequestDto.toEntity(member)).getId();
     }
 
     @Transactional

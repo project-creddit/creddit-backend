@@ -3,6 +3,7 @@ package com.creddit.credditmainserver.api;
 import com.creddit.credditmainserver.dto.request.PostSaveRequestDto;
 import com.creddit.credditmainserver.dto.request.PostUpdateRequestDto;
 import com.creddit.credditmainserver.dto.response.PostResponseDto;
+import com.creddit.credditmainserver.login.security.SecurityUtil;
 import com.creddit.credditmainserver.service.PostService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,15 +29,14 @@ public class PostApiController {
     }
 
     @ApiOperation(value = "글 작성"
-                , notes = "멤버 아이디, 제목, 내용 필수값 / null, '', ' ' 모두 불가능")
+                , notes = "제목, 내용 필수값 / null, '', ' ' 모두 불가능")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "member"),
             @ApiImplicitParam(name = "title"),
             @ApiImplicitParam(name = "content"),
             @ApiImplicitParam(name = "imgName")
     })
     @PostMapping("/post/create")
-    public Long createPost(@RequestBody @Valid PostSaveRequestDto postSaveRequestDto){
+    public Long createPost(@Valid @RequestBody PostSaveRequestDto postSaveRequestDto){
         return postService.createPost(postSaveRequestDto);
     }
 
@@ -48,6 +48,11 @@ public class PostApiController {
     }
 
     @ApiOperation(value = "글 수정")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "title"),
+            @ApiImplicitParam(name = "content"),
+            @ApiImplicitParam(name = "imgName")
+    })
     @PostMapping("/post/{id}/edit")
     public Long updatePost(@PathVariable Long id, @RequestBody PostUpdateRequestDto postUpdateRequestDto){
         return postService.updatePost(id, postUpdateRequestDto);
