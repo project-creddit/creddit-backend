@@ -93,6 +93,7 @@ public class TokenProvider{
     public boolean validateToken(String token){
         try{//토큰 내용 검증
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
         }
         catch(io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
             logger.info("잘못된 JWT 서명");
@@ -106,6 +107,7 @@ public class TokenProvider{
         catch(IllegalArgumentException e){
             logger.info("JWT 토큰이 잘못되었습니다");
         }
+
         return false;
     }
 }
