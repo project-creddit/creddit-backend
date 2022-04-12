@@ -1,4 +1,7 @@
 spring:
+  config:
+    import: application-aws.yml
+
   datasource:
     url: jdbc:h2:tcp://localhost/~/creddit-main-server
     username: sa
