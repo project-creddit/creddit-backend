@@ -14,6 +14,7 @@ public class PostResponseDto {
     private String title;
     private String content;
     private String imgName;
+    private String imgUrl;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
@@ -26,5 +27,9 @@ public class PostResponseDto {
         this.imgName = entity.getImgName();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
+    }
+
+    public void addImgUrl(String imgUrl){
+        this.imgUrl = imgUrl;
     }
 }
