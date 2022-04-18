@@ -16,8 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -39,7 +37,7 @@ public class AwsS3Service {
         checkFilenameExtension(oriFileName);
 
         String fileName = dirName + "/" + UUID.randomUUID().toString() + oriFileName;
-        String uploadUrl = putS3(file, fileName);
+        putS3(file, fileName);
 
         return fileName;
     }
