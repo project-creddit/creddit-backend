@@ -3,8 +3,7 @@ package com.creddit.credditmainserver.service;
 import com.creddit.credditmainserver.domain.Authority;
 import com.creddit.credditmainserver.domain.Member;
 import com.creddit.credditmainserver.domain.Post;
-import com.creddit.credditmainserver.dto.request.PostSaveRequestDto;
-import com.creddit.credditmainserver.dto.request.PostUpdateRequestDto;
+import com.creddit.credditmainserver.dto.request.PostRequestDto;
 import com.creddit.credditmainserver.repository.MemberRepository;
 import com.creddit.credditmainserver.repository.PostRepository;
 import org.junit.jupiter.api.Test;
@@ -89,8 +88,7 @@ class PostServiceTest {
     }
 
     private Long createPost(Member member, String title, String content) {
-        return postService.createPost(PostSaveRequestDto.builder()
-                .member(member)
+        return postService.createPost(PostRequestDto.builder()
                 .title(title)
                 .content(content)
                 .build());
