@@ -16,6 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -32,14 +34,18 @@ public class AwsS3Service {
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
-    public String upload(MultipartFile file, String dirName) {
+    public Map<String, String> upload(MultipartFile file, String dirName) {
+        Map<String, String> imgInfo = new HashMap<>();
         String oriFileName = file.getOriginalFilename();
         checkFilenameExtension(oriFileName);
 
         String fileName = dirName + "/" + UUID.randomUUID().toString() + oriFileName;
-        putS3(file, fileName);
+        String imgUrl = putS3(file, fileName);
 
-        return fileName;
+        imgInfo.put("imgName", fileName);
+        imgInfo.put("imgUrl", imgUrl);
+
+        return imgInfo;
     }
 
     public void deleteFile(String fileName){

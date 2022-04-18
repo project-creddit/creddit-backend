@@ -50,7 +50,7 @@ class PostServiceTest {
         String expectedTitle = "수정된 제목";
         String expectedContent = "수정된 내용";
 
-        Long updatedPostId = postService.updatePost(savedPostId, PostUpdateRequestDto.builder()
+        Long updatedPostId = postService.updatePost(savedPostId, PostRequestDto.builder()
                 .title(expectedTitle)
                 .content(expectedContent)
                 .build());

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = {"글 작성/수정/삭제"})
 @RequiredArgsConstructor
@@ -26,18 +27,7 @@ public class PostApiController {
     @ApiOperation(value = "전체 글 조회")
     @GetMapping("/post")
     public List<PostResponseDto> selectAllPost(){
-        List<PostResponseDto> posts = postService.findAllPost();
-
-        for(PostResponseDto responseDto : posts){
-            String imgName = responseDto.getImgName();
-
-            if(imgName != null){
-                String imgUrl = awsS3Service.getImgUrl(imgName);
-                responseDto.addImgUrl(imgUrl);
-            }
-        }
-
-        return posts;
+        return postService.findAllPost();
     }
 
     @ApiOperation(value = "글 작성"
@@ -53,8 +43,7 @@ public class PostApiController {
             @RequestPart(value = "requestDto") PostRequestDto postRequestDto
     ){
         if(file != null){
-            String imgName = awsS3Service.upload(file, "post");
-            postRequestDto.addImgName(imgName);
+            postRequestDto = imageUpload(file, postRequestDto);
         }
 
         return postService.createPost(postRequestDto);
@@ -64,15 +53,7 @@ public class PostApiController {
             , notes = "글 번호로 특정 글 조회")
     @GetMapping("/post/{id}")
     public PostResponseDto selectOnePost(@PathVariable Long id){
-        PostResponseDto responseDto = postService.findById(id);
-        String imgName = responseDto.getImgName();
-
-        if(imgName != null){
-            String imgUrl = awsS3Service.getImgUrl(imgName);
-            responseDto.addImgUrl(imgUrl);
-        }
-
-        return responseDto;
+        return postService.findById(id);
     }
 
     @ApiOperation(value = "글 수정")
@@ -90,11 +71,8 @@ public class PostApiController {
         String savedImgName = postService.findById(id).getImgName();
 
         if(file != null){
-            if(savedImgName != null){
-                awsS3Service.deleteFile(savedImgName);
-            }
-            String imgName = awsS3Service.upload(file, "post");
-            postRequestDto.addImgName(imgName);
+            checkExistImgAndDelete(savedImgName);
+            postRequestDto = imageUpload(file, postRequestDto);
         }
         return postService.updatePost(id, postRequestDto);
     }
@@ -103,8 +81,22 @@ public class PostApiController {
     @DeleteMapping("/post/{id}")
     public void deletePost(@PathVariable Long id){
         String savedImgName = postService.findById(id).getImgName();
-        awsS3Service.deleteFile(savedImgName);
 
+        checkExistImgAndDelete(savedImgName);
         postService.deletePost(id);
+    }
+
+    private void checkExistImgAndDelete(String savedImgName) {
+        if (savedImgName != null) {
+            awsS3Service.deleteFile(savedImgName);
+        }
+    }
+
+    private PostRequestDto imageUpload(MultipartFile file, PostRequestDto postRequestDto) {
+        Map<String, String> imgInfo = awsS3Service.upload(file, "post");
+        postRequestDto.addImgName(imgInfo.get("imgName"));
+        postRequestDto.addImgUrl(imgInfo.get("imgUrl"));
+
+        return postRequestDto;
     }
 }

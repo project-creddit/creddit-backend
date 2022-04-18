@@ -20,6 +20,8 @@ public class PostRequestDto {
 
     private String imgName;
 
+    private String imgUrl;
+
     @Builder
     public PostRequestDto(String title, String content) {
         this.title = title;
@@ -30,12 +32,17 @@ public class PostRequestDto {
         this.imgName = imgName;
     }
 
+    public void addImgUrl(String imgUrl){
+        this.imgUrl = imgUrl;
+    }
+
     public Post toEntity(Member member){
         return Post.builder()
                 .member(member)
                 .title(title)
                 .content(content)
                 .imgName(imgName)
+                .imgUrl(imgUrl)
                 .build();
     }
 }

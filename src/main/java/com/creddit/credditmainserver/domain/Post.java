@@ -3,10 +3,6 @@ package com.creddit.credditmainserver.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,26 +27,27 @@ public class Post extends BaseTimeEntity{
 
     private String imgName;
 
-    @Column(columnDefinition = "bigint default 0")
-    private Long likeCount;
+    private String imgUrl;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
 
     @Builder
-    public Post(Member member, String title, String content, String imgName){
+    public Post(Member member, String title, String content, String imgName, String imgUrl){
         this.member = member;
         this.title = title;
         this.content = content;
         this.imgName = imgName;
+        this.imgUrl = imgUrl;
     }
 
-    public void updatePost(String title, String content, String imgName){
+    public void updatePost(String title, String content, String imgName, String imgUrl){
         this.title = title;
         this.content = content;
         this.imgName = imgName;
+        this.imgUrl = imgUrl;
     }
 }
