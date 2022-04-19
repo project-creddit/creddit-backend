@@ -25,10 +25,12 @@ public class LikeService {
     private final CommentRepository commentRepository;
 
     public Long createLike(LikeRequestDto likeRequestDto){
+        Long commentId = likeRequestDto.getCommentId();
+
         Member member = memberRepository.getById(SecurityUtil.getCurrentMemberId());
         Post post = postRepository.getById(likeRequestDto.getPostId());
-        Comment comment = commentRepository.getById(likeRequestDto.getCommentId());
-        
+        Comment comment = commentId == null ? null : commentRepository.getById(commentId);
+
         return likeRepository.save(likeRequestDto.toEntity(member, post, comment)).getId();
     }
     

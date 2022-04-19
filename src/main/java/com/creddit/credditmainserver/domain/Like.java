@@ -4,16 +4,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Table(name = "likes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Like {
+public class Like extends BaseTimeEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
@@ -31,16 +29,16 @@ public class Like {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
-
     @Builder
     public Like(Member member, Post post, Comment comment){
         this.member = member;
         this.post = post;
         this.comment = comment;
 
+        if(comment != null){
+            comment.getLikes().add(this);
+        }
+
         post.getLikes().add(this);
-        comment.getLikes().add(this);
     }
 }
