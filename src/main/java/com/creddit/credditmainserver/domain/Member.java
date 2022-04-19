@@ -26,6 +26,10 @@ public class Member {
 
     private boolean activated;
 
+    private String introduction;
+
+    private String imgUrl;
+
     @Enumerated(EnumType.STRING)
     private Authority authority;
 

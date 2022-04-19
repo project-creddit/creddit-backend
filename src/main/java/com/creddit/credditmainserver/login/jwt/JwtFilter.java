@@ -21,7 +21,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private final TokenProvider tokenProvider;
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_TYPE = "bearer";
+    public static final String BEARER_TYPE = " Bearer";
 
 
     private String resolveToken(HttpServletRequest request){
