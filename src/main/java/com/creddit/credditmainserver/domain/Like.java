@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ public class Like {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
+    @CreatedDate
     private LocalDateTime createdDate;
 
     @Builder
