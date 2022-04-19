@@ -15,7 +15,7 @@ public class CommentResponseDto {
     private Long parentCommentId;
     private MemberResponseDto member;
     private String content;
-    private List<Like> likes;
+    private Long likes;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
@@ -24,7 +24,7 @@ public class CommentResponseDto {
         this.postId = entity.getPost().getId();
         this.parentCommentId = entity.getParentCommentId();
         this.content = entity.getContent();
-        this.likes = entity.getLikes();
+        this.likes = entity.getLikes().stream().count();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
 

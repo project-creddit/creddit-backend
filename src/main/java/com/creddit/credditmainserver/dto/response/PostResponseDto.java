@@ -18,7 +18,7 @@ public class PostResponseDto {
     private String imgName;
     private String imgUrl;
     private List<CommentResponseDto> comments;
-    private List<Like> likes;
+    private Long likes;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
@@ -28,7 +28,7 @@ public class PostResponseDto {
         this.content = entity.getContent();
         this.imgName = entity.getImgName();
         this.imgUrl = entity.getImgUrl();
-        this.likes = entity.getLikes();
+        this.likes = entity.getLikes().stream().count();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
 
