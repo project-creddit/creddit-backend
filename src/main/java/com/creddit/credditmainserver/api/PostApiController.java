@@ -26,8 +26,24 @@ public class PostApiController {
 
     @ApiOperation(value = "전체 글 조회")
     @GetMapping("/post")
-    public List<PostResponseDto> selectAllPost(){
-        return postService.findAllPost();
+    public List<PostResponseDto> getPostPage(@RequestParam Long lastPostId, @RequestParam int size){
+        return postService.fetchPostPagesBy(lastPostId, size);
+    }
+
+    @ApiOperation(value = "특정 글 조회")
+    @GetMapping("/post/{id}")
+    public PostResponseDto selectOnePost(@PathVariable Long id){
+        return postService.findById(id);
+    }
+
+    @ApiOperation(value = "글 검색")
+    @GetMapping("/post/search")
+    public List<PostResponseDto> searchPost(
+            @RequestParam Long lastPostId,
+            @RequestParam int size,
+            @RequestParam String keyword
+    ){
+        return postService.searchPostByKeyword(lastPostId, size, keyword);
     }
 
     @ApiOperation(value = "글 작성"
@@ -47,13 +63,6 @@ public class PostApiController {
         }
 
         return postService.createPost(postRequestDto);
-    }
-
-    @ApiOperation(value = "특정 글 조회"
-            , notes = "글 번호로 특정 글 조회")
-    @GetMapping("/post/{id}")
-    public PostResponseDto selectOnePost(@PathVariable Long id){
-        return postService.findById(id);
     }
 
     @ApiOperation(value = "글 수정")
