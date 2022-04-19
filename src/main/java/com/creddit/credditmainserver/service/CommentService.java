@@ -21,12 +21,11 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public Long createComment(CommentRequestDto requestDto){
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        Member member = memberRepository.getById(currentMemberId);
-        Post post = postRepository.getById(requestDto.getPostId());
+    public Long createComment(CommentRequestDto commentRequestDto){
+        Member member = memberRepository.getById(SecurityUtil.getCurrentMemberId());
+        Post post = postRepository.getById(commentRequestDto.getPostId());
 
-        return commentRepository.save(requestDto.toEntity(member, post)).getId();
+        return commentRepository.save(commentRequestDto.toEntity(member, post)).getId();
     }
 
     public Long updateComment(Long id, String content) {

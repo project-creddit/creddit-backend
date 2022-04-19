@@ -24,8 +24,7 @@ public class PostService {
 
     @Transactional
     public Long createPost(PostRequestDto postRequestDto){
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        Member member = memberRepository.getById(currentMemberId);
+        Member member = memberRepository.getById(SecurityUtil.getCurrentMemberId());
 
         return postRepository.save(postRequestDto.toEntity(member)).getId();
     }

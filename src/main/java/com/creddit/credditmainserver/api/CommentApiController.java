@@ -35,7 +35,7 @@ public class CommentApiController {
         return commentService.updateComment(id, content);
     }
 
-    @ApiOperation(value = "댓글글 삭제")
+    @ApiOperation(value = "댓글 삭제")
     @DeleteMapping("/comment/{id}")
     public void deleteComment(@PathVariable Long id){
         commentService.deleteComment(id);
