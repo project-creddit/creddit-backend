@@ -1,11 +1,9 @@
 package com.creddit.credditmainserver.dto.response;
 
 import com.creddit.credditmainserver.domain.Comment;
-import com.creddit.credditmainserver.domain.Like;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class CommentResponseDto {

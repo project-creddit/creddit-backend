@@ -63,7 +63,7 @@ public class PostApiController {
             @RequestPart(value = "requestDto") PostRequestDto postRequestDto
     ){
         if(file != null){
-            postRequestDto = imageUpload(file, postRequestDto);
+            imageUpload(file, postRequestDto);
         }
 
         return postService.createPost(postRequestDto);
@@ -84,7 +84,7 @@ public class PostApiController {
 
         if(file != null){
             checkExistImgAndDelete(savedImgName);
-            postRequestDto = imageUpload(file, postRequestDto);
+            imageUpload(file, postRequestDto);
         }
         return postService.updatePost(id, postRequestDto);
     }
