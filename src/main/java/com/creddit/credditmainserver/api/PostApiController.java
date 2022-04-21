@@ -5,10 +5,7 @@ import com.creddit.credditmainserver.dto.request.PostRequestDto;
 import com.creddit.credditmainserver.dto.response.PostResponseDto;
 import com.creddit.credditmainserver.service.AwsS3Service;
 import com.creddit.credditmainserver.service.PostService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,19 +21,28 @@ public class PostApiController {
     private final PostService postService;
     private final AwsS3Service awsS3Service;
 
-    @ApiOperation(value = "전체 글 조회")
+    @ApiOperation(value = "메인화면 글 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "lastPostId", value = "마지막 글의 ID"),
+            @ApiImplicitParam(name = "size", value = "불러올 글의 개수")
+    })
     @GetMapping("/post")
     public List<PostResponseDto> getPostPage(@RequestParam Long lastPostId, @RequestParam int size){
         return postService.fetchPostPagesBy(lastPostId, size);
     }
 
-    @ApiOperation(value = "특정 글 조회")
+    @ApiOperation(value = "글 상세화면 조회")
     @GetMapping("/post/{id}")
     public PostResponseDto selectOnePost(@PathVariable Long id){
         return postService.findById(id);
     }
 
     @ApiOperation(value = "글 검색")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "lastPostId", value = "마지막 글의 ID"),
+            @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
+            @ApiImplicitParam(name = "keyword", value = "검색할 키워드")
+    })
     @GetMapping("/post/search")
     public List<PostResponseDto> searchPost(
             @RequestParam Long lastPostId,
@@ -46,12 +52,10 @@ public class PostApiController {
         return postService.searchPostByKeyword(lastPostId, size, keyword);
     }
 
-    @ApiOperation(value = "글 작성"
-                , notes = "제목, 내용 필수값 / null, '', ' ' 모두 불가능")
+    @ApiOperation(value = "글 작성", notes = "제목, 내용 필수값 / null, '', ' ' 불가능")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "image"),
-            @ApiImplicitParam(name = "title"),
-            @ApiImplicitParam(name = "content")
+            @ApiImplicitParam(name = "image", value = "업로드할 이미지"),
+            @ApiImplicitParam(name = "requestDto", value = "제목, 내용")
     })
     @PostMapping(value = "/post/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public Long createPost(
@@ -65,11 +69,10 @@ public class PostApiController {
         return postService.createPost(postRequestDto);
     }
 
-    @ApiOperation(value = "글 수정")
+    @ApiOperation(value = "글 수정", notes = "제목, 내용 필수값 / null, '', ' ' 불가능")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "image"),
-            @ApiImplicitParam(name = "title"),
-            @ApiImplicitParam(name = "content")
+            @ApiImplicitParam(name = "image", value = "수정할 이미지"),
+            @ApiImplicitParam(name = "requestDto", value = "제목, 내용", example = "{'title': '제목', 'content': '내용'}")
     })
     @PostMapping("/post/{id}/edit")
     public Long updatePost(
