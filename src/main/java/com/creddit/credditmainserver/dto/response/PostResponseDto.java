@@ -22,22 +22,22 @@ public class PostResponseDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public PostResponseDto(Post entity) {
-        this.id = entity.getId();
-        this.title = entity.getTitle();
-        this.content = entity.getContent();
-        this.imgName = entity.getImgName();
-        this.imgUrl = entity.getImgUrl();
-        this.likes = entity.getLikes().stream().count();
-        this.createdDate = entity.getCreatedDate();
-        this.modifiedDate = entity.getModifiedDate();
+    public PostResponseDto(Post post) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.imgName = post.getImgName();
+        this.imgUrl = post.getImgUrl();
+        this.likes = post.getLikes().stream().count();
+        this.createdDate = post.getCreatedDate();
+        this.modifiedDate = post.getModifiedDate();
 
         this.member = MemberResponseDto.builder()
-                .email(entity.getMember().getEmail())
-                .nickname(entity.getMember().getNickname())
+                .email(post.getMember().getEmail())
+                .nickname(post.getMember().getNickname())
                 .build();
 
-        this.comments = entity.getComments().stream().map(CommentResponseDto::new)
+        this.comments = post.getComments().stream().map(CommentResponseDto::new)
                 .collect(Collectors.toList());
     }
 }

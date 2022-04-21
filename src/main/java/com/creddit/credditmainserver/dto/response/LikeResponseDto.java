@@ -18,15 +18,15 @@ public class LikeResponseDto {
 
     private LocalDateTime createdDate;
 
-    public LikeResponseDto(Like entity){
-        this.likeId = entity.getId();
-        this.postId = entity.getPost().getId();
-        this.commentId = entity.getComment().getId();
-        this.createdDate = entity.getCreatedDate();
+    public LikeResponseDto(Like like){
+        this.likeId = like.getId();
+        this.postId = like.getPost().getId();
+        this.commentId = like.getComment().getId();
+        this.createdDate = like.getCreatedDate();
 
         this.member = MemberResponseDto.builder()
-                .email(entity.getMember().getEmail())
-                .nickname(entity.getMember().getNickname())
+                .email(like.getMember().getEmail())
+                .nickname(like.getMember().getNickname())
                 .build();
     }
 

@@ -19,18 +19,18 @@ public class CommentResponseDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public CommentResponseDto(Comment entity){
-        this.commentId = entity.getId();
-        this.postId = entity.getPost().getId();
-        this.parentCommentId = entity.getParentCommentId();
-        this.content = entity.getContent();
-        this.likes = entity.getLikes().stream().count();
-        this.createdDate = entity.getCreatedDate();
-        this.modifiedDate = entity.getModifiedDate();
+    public CommentResponseDto(Comment comment){
+        this.commentId = comment.getId();
+        this.postId = comment.getPost().getId();
+        this.parentCommentId = comment.getParentCommentId();
+        this.content = comment.getContent();
+        this.likes = comment.getLikes().stream().count();
+        this.createdDate = comment.getCreatedDate();
+        this.modifiedDate = comment.getModifiedDate();
 
         this.member = MemberResponseDto.builder()
-                .email(entity.getMember().getEmail())
-                .nickname(entity.getMember().getNickname())
+                .email(comment.getMember().getEmail())
+                .nickname(comment.getMember().getNickname())
                 .build();
     }
 }
