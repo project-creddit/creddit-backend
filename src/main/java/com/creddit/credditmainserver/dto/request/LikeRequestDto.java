@@ -22,11 +22,14 @@ public class LikeRequestDto {
         this.commentId = commentId;
     }
 
-    public Like toEntity(Member member, Post post, Comment comment){
-        return Like.builder()
-                .member(member)
-                .post(post)
-                .comment(comment)
-                .build();
+    public Like postLikeToEntity(Member member, Post post) {
+        Like like = new Like();
+        return like.createPostLike(member, post);
     }
+
+    public Like commentLikeToEntity(Member member, Comment comment) {
+        Like like = new Like();
+        return like.createCommentLike(member, comment);
+    }
+
 }

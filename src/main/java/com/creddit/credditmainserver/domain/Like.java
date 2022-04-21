@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Getter
 @Table(name = "likes")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 public class Like extends BaseTimeEntity{
 
@@ -29,17 +29,19 @@ public class Like extends BaseTimeEntity{
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    public void createCommentLike(Member member, Comment comment) {
-        this.member = member;
-        this.comment = comment;
-
-        comment.getLikes().add(this);
-    }
-
-    public void createPostLike(Member member, Post post) {
+    public Like createPostLike(Member member, Post post) {
         this.member = member;
         this.post = post;
 
         post.getLikes().add(this);
+        return this;
+    }
+
+    public Like createCommentLike(Member member, Comment comment) {
+        this.member = member;
+        this.comment = comment;
+
+        comment.getLikes().add(this);
+        return this;
     }
 }

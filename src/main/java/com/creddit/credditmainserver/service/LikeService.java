@@ -24,14 +24,18 @@ public class LikeService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public Long createLike(LikeRequestDto likeRequestDto){
-        Long commentId = likeRequestDto.getCommentId();
-
+    public Long createPostLike(LikeRequestDto likeRequestDto){
         Member member = memberRepository.getById(SecurityUtil.getCurrentMemberId());
         Post post = postRepository.getById(likeRequestDto.getPostId());
-        Comment comment = commentId == null ? null : commentRepository.getById(commentId);
 
-        return likeRepository.save(likeRequestDto.toEntity(member, post, comment)).getId();
+        return likeRepository.save(likeRequestDto.postLikeToEntity(member, post)).getId();
+    }
+
+    public Long createCommentLike(LikeRequestDto likeRequestDto){
+        Member member = memberRepository.getById(SecurityUtil.getCurrentMemberId());
+        Comment comment = commentRepository.getById(likeRequestDto.getCommentId());
+
+        return likeRepository.save(likeRequestDto.commentLikeToEntity(member, comment)).getId();
     }
     
     public void deleteLike(Long id){
