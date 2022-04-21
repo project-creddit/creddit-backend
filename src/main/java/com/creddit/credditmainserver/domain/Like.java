@@ -22,22 +22,23 @@ public class Like extends BaseTimeEntity{
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @Builder
-    public Like(Member member, Post post, Comment comment){
+    public void createCommentLike(Member member, Comment comment) {
         this.member = member;
-        this.post = post;
         this.comment = comment;
 
-        if(comment != null){
-            comment.getLikes().add(this);
-        }
+        comment.getLikes().add(this);
+    }
+
+    public void createPostLike(Member member, Post post) {
+        this.member = member;
+        this.post = post;
 
         post.getLikes().add(this);
     }
