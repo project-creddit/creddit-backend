@@ -1,5 +1,5 @@
 package com.creddit.credditmainserver.domain;
 
 public enum ImageFormatType {
-    JPG, PNG, GIF
+    JPG, JPEG, PNG, GIF
 }

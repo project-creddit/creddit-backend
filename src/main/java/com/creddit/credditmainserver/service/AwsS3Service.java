@@ -33,18 +33,18 @@ public class AwsS3Service {
     }
 
     public Image upload(MultipartFile file, String dirName) {
+        Image image = new Image();
+
         String oriFileName = file.getOriginalFilename();
+        image.checkFilenameExtension(oriFileName);
+
         String fileName = dirName + "/" + UUID.randomUUID().toString() + oriFileName;
         String imgUrl = putS3(file, fileName);
 
-        Image image = Image.builder()
+        return Image.builder()
                 .imgName(fileName)
                 .imgUrl(imgUrl)
                 .build();
-
-        image.checkFilenameExtension(oriFileName);
-
-        return image;
     }
 
     public void deleteFile(String fileName){
