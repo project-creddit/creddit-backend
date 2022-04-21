@@ -3,13 +3,10 @@ package com.creddit.credditmainserver.api;
 import com.creddit.credditmainserver.domain.Authority;
 import com.creddit.credditmainserver.domain.Member;
 import com.creddit.credditmainserver.domain.Post;
-import com.creddit.credditmainserver.dto.request.PostSaveRequestDto;
-import com.creddit.credditmainserver.dto.request.PostUpdateRequestDto;
+import com.creddit.credditmainserver.dto.request.PostRequestDto;
 import com.creddit.credditmainserver.repository.MemberRepository;
 import com.creddit.credditmainserver.repository.PostRepository;
-import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +14,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
@@ -44,12 +40,12 @@ class PostApiControllerTest {
         String title = "테스트 제목";
         String content = "테스트 내용";
 
-        PostSaveRequestDto postSaveRequestDto = createPostSaveRequestDto(member, title, content);
+        PostRequestDto postRequestDto = createPostSaveRequestDto(member, title, content);
 
         String url = "http://localhost:" + port +"/post/create";
 
         // when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, postSaveRequestDto, Long.class);
+        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, postRequestDto, Long.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
@@ -63,13 +59,14 @@ class PostApiControllerTest {
     @Test
     public void 글_수정() throws Exception{
         // given
-        PostSaveRequestDto postSaveRequestDto = createPostSaveRequestDto(createMember(), "테스트 제목", "테스트 내용");
-        Long savedPostId = postRepository.save(postSaveRequestDto.toEntity()).getId();
+        Member member = createMember();
+        PostRequestDto postRequestDto = createPostSaveRequestDto(member, "테스트 제목", "테스트 내용");
+        Long savedPostId = postRepository.save(postRequestDto.toEntity(member)).getId();
 
         String expectedTitle = "수정된 제목";
         String expectedContent = "수정된 내용";
 
-        PostUpdateRequestDto postUpdateRequestDto = PostUpdateRequestDto.builder()
+        PostRequestDto postUpdateRequestDto = PostRequestDto.builder()
                 .title(expectedTitle)
                 .content(expectedContent)
                 .build();
@@ -99,9 +96,8 @@ class PostApiControllerTest {
         return memberRepository.save(member);
     }
 
-    private PostSaveRequestDto createPostSaveRequestDto(Member member, String title, String content) {
-        return PostSaveRequestDto.builder()
-                .member(member)
+    private PostRequestDto createPostSaveRequestDto(Member member, String title, String content) {
+        return PostRequestDto.builder()
                 .title(title)
                 .content(content)
                 .build();
