@@ -1,5 +1,6 @@
 package com.creddit.credditmainserver.api;
 
+import com.creddit.credditmainserver.domain.Image;
 import com.creddit.credditmainserver.dto.request.PostRequestDto;
 import com.creddit.credditmainserver.dto.response.PostResponseDto;
 import com.creddit.credditmainserver.service.AwsS3Service;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 @Api(tags = {"글 작성/수정/삭제"})
 @RequiredArgsConstructor
@@ -77,7 +77,7 @@ public class PostApiController {
             @RequestPart(value = "image", required = false) MultipartFile file,
             @RequestPart(value = "requestDto") PostRequestDto postRequestDto
     ){
-        String savedImgName = postService.findById(id).getImgName();
+        String savedImgName = postService.findById(id).getImage().getImgName();
 
         if(file != null){
             checkExistImgAndDelete(savedImgName);
@@ -89,7 +89,7 @@ public class PostApiController {
     @ApiOperation(value = "글 삭제")
     @DeleteMapping("/post/{id}")
     public void deletePost(@PathVariable Long id){
-        String savedImgName = postService.findById(id).getImgName();
+        String savedImgName = postService.findById(id).getImage().getImgName();
 
         checkExistImgAndDelete(savedImgName);
         postService.deletePost(id);
@@ -102,9 +102,8 @@ public class PostApiController {
     }
 
     private PostRequestDto imageUpload(MultipartFile file, PostRequestDto postRequestDto) {
-        Map<String, String> imgInfo = awsS3Service.upload(file, "post");
-        postRequestDto.addImgName(imgInfo.get("imgName"));
-        postRequestDto.addImgUrl(imgInfo.get("imgUrl"));
+        Image image = awsS3Service.upload(file, "post");
+        postRequestDto.addImage(image);
 
         return postRequestDto;
     }

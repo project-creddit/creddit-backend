@@ -36,7 +36,12 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
 
-        post.updatePost(postRequestDto.getTitle(), postRequestDto.getContent(), postRequestDto.getImgName(), postRequestDto.getImgUrl());
+        post.updatePost(
+                postRequestDto.getTitle(),
+                postRequestDto.getContent(),
+                postRequestDto.getImage().getImgName(),
+                postRequestDto.getImage().getImgUrl()
+        );
 
         return id;
     }

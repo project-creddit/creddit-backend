@@ -5,9 +5,9 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.creddit.credditmainserver.domain.Image;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -34,18 +32,19 @@ public class AwsS3Service {
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
-    public Map<String, String> upload(MultipartFile file, String dirName) {
-        Map<String, String> imgInfo = new HashMap<>();
+    public Image upload(MultipartFile file, String dirName) {
         String oriFileName = file.getOriginalFilename();
-        checkFilenameExtension(oriFileName);
-
         String fileName = dirName + "/" + UUID.randomUUID().toString() + oriFileName;
         String imgUrl = putS3(file, fileName);
 
-        imgInfo.put("imgName", fileName);
-        imgInfo.put("imgUrl", imgUrl);
+        Image image = Image.builder()
+                .imgName(fileName)
+                .imgUrl(imgUrl)
+                .build();
 
-        return imgInfo;
+        image.checkFilenameExtension(oriFileName);
+
+        return image;
     }
 
     public void deleteFile(String fileName){
@@ -66,16 +65,4 @@ public class AwsS3Service {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
         }
     }
-
-    private void checkFilenameExtension(String fileName) {
-        String extension = FilenameUtils.getExtension(fileName);
-
-        if(!(extension.equals("jpg") || extension.equals("png") || extension.equals("gif"))){
-            log.info("확장자 : " + extension);
-            throw new IllegalArgumentException("확장자가 적절하지 않습니다.");
-        }
-    }
-
-
-
 }

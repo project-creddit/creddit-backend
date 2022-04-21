@@ -1,6 +1,6 @@
 package com.creddit.credditmainserver.dto.response;
 
-import com.creddit.credditmainserver.domain.Like;
+import com.creddit.credditmainserver.domain.Image;
 import com.creddit.credditmainserver.domain.Post;
 import lombok.Getter;
 
@@ -15,8 +15,7 @@ public class PostResponseDto {
     private MemberResponseDto member;
     private String title;
     private String content;
-    private String imgName;
-    private String imgUrl;
+    private Image image;
     private List<CommentResponseDto> comments;
     private Long likes;
     private LocalDateTime createdDate;
@@ -26,8 +25,6 @@ public class PostResponseDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.imgName = post.getImgName();
-        this.imgUrl = post.getImgUrl();
         this.likes = post.getLikes().stream().count();
         this.createdDate = post.getCreatedDate();
         this.modifiedDate = post.getModifiedDate();
@@ -39,5 +36,10 @@ public class PostResponseDto {
 
         this.comments = post.getComments().stream().map(CommentResponseDto::new)
                 .collect(Collectors.toList());
+
+        this.image = Image.builder()
+                .imgName(post.getImgName())
+                .imgUrl(post.getImgUrl())
+                .build();
     }
 }
