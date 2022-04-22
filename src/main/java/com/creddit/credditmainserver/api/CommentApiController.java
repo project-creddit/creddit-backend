@@ -18,7 +18,7 @@ public class CommentApiController {
     @ApiOperation(value = "댓글 작성", notes = "글 번호, 내용 필수값 / 내용 null, '', ' ' 모두 불가능")
     @ApiImplicitParam(name = "requestDto", value = "글 ID, 부모 댓글 ID, 내용")
     @PostMapping("/comment")
-    public Long createComment(@RequestPart(value = "requestDto") CommentRequestDto commentRequestDto){
+    public Long createComment(@RequestBody CommentRequestDto commentRequestDto){
         return commentService.createComment(commentRequestDto);
     }
 
