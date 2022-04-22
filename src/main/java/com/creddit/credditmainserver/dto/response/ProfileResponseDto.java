@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Getter
@@ -18,10 +19,13 @@ public class ProfileResponseDto {
 
     private Image image;
 
+    private LocalDateTime createdDate;
+
     public ProfileResponseDto(Member member) {
 
         this.nickname = member.getNickname();
         this.introduction = member.getIntroduction();
+        this.createdDate = member.getCreatedDate();
         this.image = Image.builder()
                 .imgName(member.getImgName())
                 .imgUrl(member.getImgUrl())
