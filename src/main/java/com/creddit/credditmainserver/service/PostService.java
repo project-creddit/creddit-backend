@@ -39,8 +39,8 @@ public class PostService {
         post.updatePost(
                 postRequestDto.getTitle(),
                 postRequestDto.getContent(),
-                postRequestDto.getImage().getImgName(),
-                postRequestDto.getImage().getImgUrl()
+                postRequestDto.getImgName(),
+                postRequestDto.getImgUrl()
         );
 
         return id;
