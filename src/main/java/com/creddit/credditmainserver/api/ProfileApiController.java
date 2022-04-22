@@ -12,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -29,7 +26,7 @@ public class ProfileApiController {
     private final AwsS3Service awsS3Service;
 
     @ApiOperation(value = "프로필 출력")
-    @PostMapping("/profile/show")
+    @GetMapping("/profile/show")
     public ProfileResponseDto getProfile(Principal principal){
         String id = principal.getName();
         return profileService.getProfile(Long.parseLong(id));
