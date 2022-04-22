@@ -30,9 +30,16 @@ public class Member {
 
     private String imgUrl;
 
+    private String imgName;
+
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    public void setProfile(String imgUrl, String imgName, String introduction){
+        this.imgUrl = imgUrl;
+        this.imgName = imgName;
+        this.introduction = (introduction == null) ? "" : introduction;
+    }
     public static Member toEntity(String email, String password, String nickname, Authority authority, boolean activated) {
         Member member= new Member();
         member.setEmail(email);
