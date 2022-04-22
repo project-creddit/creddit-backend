@@ -4,15 +4,17 @@ import com.creddit.credditmainserver.dto.response.MemberResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
 @Getter
 @Setter
-public class Member {
+public class Member{
 
     @Id @GeneratedValue
     @Column(name="member_id")
@@ -34,6 +36,9 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
+
+    @CreatedDate
+    private LocalDateTime createdDate;
 
     public void setProfile(String imgUrl, String imgName, String introduction){
         this.imgUrl = imgUrl;
