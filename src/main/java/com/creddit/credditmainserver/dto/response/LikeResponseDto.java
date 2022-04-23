@@ -24,10 +24,7 @@ public class LikeResponseDto {
         this.commentId = like.getComment().getId();
         this.createdDate = like.getCreatedDate();
 
-        this.member = MemberResponseDto.builder()
-                .email(like.getMember().getEmail())
-                .nickname(like.getMember().getNickname())
-                .build();
+        this.member = new MemberResponseDto(like.getMember());
     }
 
 }

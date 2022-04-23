@@ -27,10 +27,7 @@ public class CommentResponseDto {
         this.createdDate = comment.getCreatedDate();
         this.modifiedDate = comment.getModifiedDate();
 
-        this.member = MemberResponseDto.builder()
-                .email(comment.getMember().getEmail())
-                .nickname(comment.getMember().getNickname())
-                .build();
+        this.member = new MemberResponseDto(comment.getMember());
 
         this.isLiked = comment.getLikes().stream().anyMatch(
                 like -> like.getMember()
