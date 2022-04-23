@@ -38,25 +38,57 @@ public class TokenProvider{
         this.key= Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto createToken(Authentication authentication){
+    private Date makeValidity(long time){
+        long now = (new Date()).getTime();
+        return new Date(now + time);
+    }
 
-        String authorities = authentication.getAuthorities().stream()
+    private String makeAuthority(Authentication authentication){
+        return authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+    }
 
-        String accessToken = Jwts.builder()
+    public String createAccessToken(Authentication authentication){
+        String authorities = makeAuthority(authentication);
+        Date validity = makeValidity(ACCESS_TOKEN_EXPIRE_TIME);
+
+        return Jwts.builder()
                 .setSubject(authentication.getName()) //sub: name
                 .claim(AUTHORITIES_KEY,authorities) //auth: role
                 .signWith(key, SignatureAlgorithm.HS512) //alg: HS512
                 .setExpiration(validity) //exp: 토큰 만료 시간
                 .compact();
+    }
 
-        String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))//만료날짜
-                .signWith(key, SignatureAlgorithm.HS512)//복호 알고리즘 정보
+    public  String createRefreshToken(Authentication authentication){
+        String authorities = makeAuthority(authentication);
+        Date validity = makeValidity(REFRESH_TOKEN_EXPIRE_TIME);
+
+        return Jwts.builder()
+                .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+
+    }
+
+    public TokenDto reissue(Authentication authentication, String refreshToken){
+        String accessToken = createAccessToken(authentication);
+        Date validity =  makeValidity(ACCESS_TOKEN_EXPIRE_TIME);
+
+        return TokenDto.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .validty(validity.getTime())
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public TokenDto createAccessRefreshToken(Authentication authentication){
+
+        String refreshToken = createRefreshToken(authentication);
+        String accessToken = createAccessToken(authentication);
+        Date validity = makeValidity( ACCESS_TOKEN_EXPIRE_TIME);
 
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)
