@@ -43,8 +43,14 @@ public class AuthController {
     }
 
     @ApiOperation(value="accesstoken 재발급")
-    @PostMapping("/reissue")
-    public TokenDto reissue(@RequestBody TokenRequestDto tokenRequestDto){
-        return authService.reissue(tokenRequestDto);
+    @PostMapping("/reissueAccessToken")
+    public TokenDto  reissueAccessToken(@RequestBody TokenRequestDto tokenRequestDto){
+        return authService.reissueAccessToken(tokenRequestDto);
+    }
+
+    @ApiOperation(value="accesstoken  refreshtoken 재발급")
+    @PostMapping("/reissueAccessRefreshToken")
+    public TokenDto  reissueAccessRefreshToken(@RequestBody TokenRequestDto tokenRequestDto){
+        return authService.reissueAccessRefreshToken(tokenRequestDto);
     }
 }
