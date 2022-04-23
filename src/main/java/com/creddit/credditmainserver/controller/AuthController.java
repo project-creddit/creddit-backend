@@ -42,15 +42,15 @@ public class AuthController {
         return authService.login(memberRequestDto);
     }
 
-    @ApiOperation(value="accesstoken 재발급")
-    @PostMapping("/reissueAccess")
-    public TokenDto reissueAccessToken(@RequestBody TokenRequestDto tokenRequestDto){
+
+    @PostMapping("/reissueAccessToken")
+    public TokenDto  reissueAccessToken(@RequestBody TokenRequestDto tokenRequestDto){
         return authService.reissueAccessToken(tokenRequestDto);
     }
 
-    @ApiOperation(value="accesstoken&RefreshToken 재발급")
-    @PostMapping("/reissueAccessRefresh")
-    public TokenDto reissueAccessRefreshToken(@RequestBody TokenRequestDto tokenRequestDto){
+    @ApiOperation(value="accesstoken  refreshtoken 재발급")
+    @PostMapping("/reissueAccessRefreshToken")
+    public TokenDto  reissueAccessRefreshToken(@RequestBody TokenRequestDto tokenRequestDto){
         return authService.reissueAccessRefreshToken(tokenRequestDto);
     }
 }

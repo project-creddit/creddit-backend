@@ -72,7 +72,7 @@ public class PostApiController {
     @ApiOperation(value = "글 수정", notes = "제목, 내용 필수값 / null, '', ' ' 불가능")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "image", value = "수정할 이미지"),
-            @ApiImplicitParam(name = "requestDto", value = "제목, 내용", example = "{'title': '제목', 'content': '내용'}")
+            @ApiImplicitParam(name = "requestDto", value = "제목, 내용")
     })
     @PostMapping("/post/{id}/edit")
     public Long updatePost(

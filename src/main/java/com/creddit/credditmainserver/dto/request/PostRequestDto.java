@@ -19,7 +19,9 @@ public class PostRequestDto {
     @NotBlank(message = "내용은 빈 칸일 수 없습니다.")
     private String content;
 
-    private Image image;
+    private String imgName;
+
+    private String imgUrl;
 
     @Builder
     public PostRequestDto(String title, String content) {
@@ -28,7 +30,8 @@ public class PostRequestDto {
     }
 
     public void addImage(Image image){
-        this.image = image;
+        this.imgName= image.getImgName();
+        this.imgUrl = image.getImgUrl();
     }
 
     public Post toEntity(Member member){
@@ -36,8 +39,8 @@ public class PostRequestDto {
                 .member(member)
                 .title(title)
                 .content(content)
-                .imgName(image.getImgName())
-                .imgUrl(image.getImgUrl())
+                .imgName(imgName)
+                .imgUrl(imgUrl)
                 .build();
     }
 }
