@@ -40,10 +40,7 @@ public class AuthService {
 
         memberRepository.save(member);
 
-        return MemberResponseDto.builder()
-                .email(member.getEmail())
-                .nickname(member.getNickname())
-                .build();
+        return new MemberResponseDto(member);
     }
 
     @Transactional
