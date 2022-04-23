@@ -30,10 +30,7 @@ public class PostResponseDto {
         this.createdDate = post.getCreatedDate();
         this.modifiedDate = post.getModifiedDate();
 
-        this.member = MemberResponseDto.builder()
-                .email(post.getMember().getEmail())
-                .nickname(post.getMember().getNickname())
-                .build();
+        this.member = new MemberResponseDto(post.getMember());
 
         this.comments = post.getComments().stream().map(CommentResponseDto::new)
                 .collect(Collectors.toList());
