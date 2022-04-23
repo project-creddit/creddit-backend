@@ -20,6 +20,7 @@ public class PostResponseDto {
     private Long likes;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+    private boolean isLiked;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -41,5 +42,11 @@ public class PostResponseDto {
                 .imgName(post.getImgName())
                 .imgUrl(post.getImgUrl())
                 .build();
+
+        this.isLiked = post.getLikes().stream().anyMatch(
+                like -> like.getMember()
+                        .getEmail()
+                        .equals(member.getEmail())
+        ) ? true : false;
     }
 }
