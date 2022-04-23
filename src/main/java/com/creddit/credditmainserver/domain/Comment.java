@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 public class Comment extends BaseTimeEntity{
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
 
@@ -27,23 +27,22 @@ public class Comment extends BaseTimeEntity{
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
+    private Long parentCommentId;
+
     @NotNull(message = "내용은 빈 칸일 수 없습니다.")
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(columnDefinition = "bigint default 0")
-    private Long likeCount;
-
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
 
     @Builder
-    public Comment(Member member, Post post, String content) {
+    public Comment(Member member, Post post, String content, Long parentCommentId) {
         this.member = member;
         this.post = post;
         this.content = content;
+        this.parentCommentId = parentCommentId;
 
-        member.getComments().add(this);
         post.getComments().add(this);
     }
 

@@ -1,4 +1,7 @@
 spring:
+  config:
+    import: application-aws.yml
+
   datasource:
     url: jdbc:h2:tcp://localhost/~/creddit-main-server
     username: sa
@@ -21,6 +24,7 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+    com.amazonaws.util.EC2MetadataUtils: error
 
 jwt:
   secret: Y3JlZGl0LXRlYW0tc3ByaW5nLWJvb3QtanBhLW15c3FsLXByb2plY3Qtc29jaWFsLW5ldHdvcmstc2VydmljZQo=

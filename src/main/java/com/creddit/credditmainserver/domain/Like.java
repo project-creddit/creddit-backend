@@ -6,15 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Table(name = "likes")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
-public class Like {
+public class Like extends BaseTimeEntity{
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
     private Long id;
 
@@ -23,23 +22,26 @@ public class Like {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    private LocalDateTime createdDate;
-
-    @Builder
-    public Like(Member member, Post post, Comment comment){
+    public Like createPostLike(Member member, Post post) {
         this.member = member;
         this.post = post;
+
+        post.getLikes().add(this);
+        return this;
+    }
+
+    public Like createCommentLike(Member member, Comment comment) {
+        this.member = member;
         this.comment = comment;
 
-        member.getLikes().add(this);
-        post.getLikes().add(this);
         comment.getLikes().add(this);
+        return this;
     }
 }

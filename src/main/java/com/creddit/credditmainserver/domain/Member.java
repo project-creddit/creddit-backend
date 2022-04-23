@@ -4,15 +4,17 @@ import com.creddit.credditmainserver.dto.response.MemberResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
 @Getter
 @Setter
-public class Member {
+public class Member{
 
     @Id @GeneratedValue
     @Column(name="member_id")
@@ -30,18 +32,19 @@ public class Member {
 
     private String imgUrl;
 
+    private String imgName;
+
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToMany(mappedBy = "member")
-    private List<Post> posts = new ArrayList<>();
+    @CreatedDate
+    private LocalDateTime createdDate;
 
-    @OneToMany(mappedBy = "member")
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Like> likes = new ArrayList<>();
-
+    public void setProfile(String imgUrl, String imgName, String introduction){
+        this.imgUrl = imgUrl;
+        this.imgName = imgName;
+        this.introduction = (introduction == null) ? "" : introduction;
+    }
     public static Member toEntity(String email, String password, String nickname, Authority authority, boolean activated) {
         Member member= new Member();
         member.setEmail(email);

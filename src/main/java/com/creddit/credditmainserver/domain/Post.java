@@ -3,8 +3,6 @@ package com.creddit.credditmainserver.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,7 @@ import java.util.List;
 @Entity
 public class Post extends BaseTimeEntity{
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
 
@@ -21,38 +19,35 @@ public class Post extends BaseTimeEntity{
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @NotNull(message = "제목은 빈 칸일 수 없습니다.")
-    @Size(max = 50)
+    @Column(nullable = false)
     private String title;
 
-    @NotNull(message = "내용은 빈 칸일 수 없습니다.")
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     private String imgName;
 
-    @Column(columnDefinition = "bigint default 0")
-    private Long likeCount;
+    private String imgUrl;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
 
     @Builder
-    public Post(Member member, String title, String content, String imgName){
+    public Post(Member member, String title, String content, String imgName, String imgUrl){
         this.member = member;
         this.title = title;
         this.content = content;
         this.imgName = imgName;
-
-        member.getPosts().add(this);
+        this.imgUrl = imgUrl;
     }
 
-    public void updatePost(String title, String content, String imgName){
+    public void updatePost(String title, String content, String imgName, String imgUrl){
         this.title = title;
         this.content = content;
         this.imgName = imgName;
+        this.imgUrl = imgUrl;
     }
 }
