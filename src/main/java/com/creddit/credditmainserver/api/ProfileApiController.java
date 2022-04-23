@@ -36,7 +36,7 @@ public class ProfileApiController {
     @PostMapping(value = "/profile/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ProfileResponseDto saveProfile(Principal principal,
                                           @RequestPart(value = "image", required = false) MultipartFile file,
-                                          @Valid @RequestBody ProfileRequestDto profileRequestDto){
+                                          @Valid @RequestPart ProfileRequestDto profileRequestDto){
         Long id = Long.parseLong(principal.getName());
 
         if(file!= null){

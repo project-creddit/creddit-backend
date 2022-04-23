@@ -42,7 +42,7 @@ public class AuthController {
         return authService.login(memberRequestDto);
     }
 
-    @ApiOperation(value="accesstoken 재발급")
+
     @PostMapping("/reissueAccessToken")
     public TokenDto  reissueAccessToken(@RequestBody TokenRequestDto tokenRequestDto){
         return authService.reissueAccessToken(tokenRequestDto);

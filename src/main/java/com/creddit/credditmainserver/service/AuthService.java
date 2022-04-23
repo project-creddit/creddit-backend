@@ -1,5 +1,6 @@
 package com.creddit.credditmainserver.service;
 
+import antlr.Token;
 import com.creddit.credditmainserver.domain.Authority;
 import com.creddit.credditmainserver.domain.Member;
 import com.creddit.credditmainserver.domain.RefreshToken;
@@ -75,7 +76,10 @@ public class AuthService {
         if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
             throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
         }
+
+
         return tokenProvider.reissue(authentication,tokenRequestDto.getRefreshToken());
+
     }
 
     @Transactional
