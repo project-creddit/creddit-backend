@@ -16,4 +16,9 @@ public class MemberResponseDto {
     private String email;
 
     private String nickname;
+
+    public MemberResponseDto(Member member){
+        this.email = member.getEmail();
+        this.nickname = member.getNickname();
+    }
 }
