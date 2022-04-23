@@ -16,6 +16,7 @@ public class CommentResponseDto {
     private Long likes;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+    private boolean isLiked;
 
     public CommentResponseDto(Comment comment){
         this.commentId = comment.getId();
@@ -30,5 +31,11 @@ public class CommentResponseDto {
                 .email(comment.getMember().getEmail())
                 .nickname(comment.getMember().getNickname())
                 .build();
+
+        this.isLiked = comment.getLikes().stream().anyMatch(
+                like -> like.getMember()
+                        .getEmail()
+                        .equals(member.getEmail())
+        ) ? true : false;
     }
 }
