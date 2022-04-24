@@ -3,12 +3,14 @@ package com.creddit.credditmainserver.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 
 @Slf4j
 @NoArgsConstructor
 @Getter
+@Setter
 public class Image {
 
     private String imgName;
