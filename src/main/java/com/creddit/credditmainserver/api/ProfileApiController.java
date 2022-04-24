@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 
 @Api(tags= "프로필")
@@ -36,21 +37,25 @@ public class ProfileApiController {
     @PostMapping(value = "/profile/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ProfileResponseDto saveProfile(Principal principal,
                                           @RequestPart(value = "image", required = false) MultipartFile file,
-                                          @Valid @RequestPart ProfileRequestDto profileRequestDto){
+                                          @Valid @RequestPart ProfileRequestDto profileRequestDto) throws IOException {
         Long id = Long.parseLong(principal.getName());
+        checkExistImgAndDelete(profileService.findById(id).getImgName());
+        Image image = new Image();
 
-        if(file!= null){
-            checkExistImgAndDelete(profileService.findById(id).getImgName());
-
-            Image image = awsS3Service.upload(file, "post");
-            profileRequestDto.setImage(image);
+        if(!file.isEmpty()){
+            image = awsS3Service.upload(file, "post");
+        }
+        else{
+            image.setImgName("empty");
+            image.setImgUrl("");
         }
 
+        profileRequestDto.setImage(image);
         return profileService.saveProfile(id, profileRequestDto);
     }
 
     private void checkExistImgAndDelete(String savedImgName) {
-        if (savedImgName != null) {
+        if (savedImgName != null && savedImgName != "empty") {
             awsS3Service.deleteFile(savedImgName);
         }
     }
