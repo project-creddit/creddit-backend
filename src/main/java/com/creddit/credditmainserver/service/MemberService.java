@@ -37,7 +37,7 @@ public class MemberService {
     public Long deleteFollow(String nickname, Principal principal){
         Member follower = memberRepository.findById(Long.parseLong(principal.getName())).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 memberId =" + Long.parseLong(principal.getName())));
         Member following = memberRepository.findByNickname(nickname).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 nickname =" + nickname));
-        Follower follow = followRepository.findByFollowingAndAndFollower(following.getId(),follower).orElseThrow();
+        Follower follow = followRepository.findByFollowingAndAndFollower(following.getId(),follower).orElseThrow(()-> new IllegalArgumentException("불가능한 요청입니다."));
         followRepository.deleteAllById(follow.getId());
         return follow.getId();
     }
