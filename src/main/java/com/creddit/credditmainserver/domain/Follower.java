@@ -14,23 +14,22 @@ public class Follower {
 
     @Id
     @GeneratedValue
+    @Column(name = "follow_id")
     private Long id;
-
-    private Long follwer; //memberId
 
     private Long following; //memberId
 
     @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="member_id")
-    private Member member;
+    private Member follower;
 
     public Follower(){
 
     }
 
-    public Follower(Long follower, Long following){
+    public Follower(Member follower, Long following){
         this.following = following;
-        this.follwer = follower;
+        this.follower = follower;
     }
 }

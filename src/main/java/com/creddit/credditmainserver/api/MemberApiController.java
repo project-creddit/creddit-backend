@@ -20,7 +20,7 @@ public class MemberApiController {
 
 
     @PostMapping("/follow")
-    public Follower follow(@RequestBody  String followingNickname, Principal principal){
+    public Long follow(@RequestBody  String followingNickname, Principal principal) throws Exception {
         return memberService.follw(followingNickname,principal);
     }
 
