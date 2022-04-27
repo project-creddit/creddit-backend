@@ -40,6 +40,9 @@ public class Member{
     @CreatedDate
     private LocalDateTime createdDate;
 
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+    private List<Follower> followings = new ArrayList<>();
+
     public void setProfile(String imgUrl, String imgName, String introduction){
         this.imgUrl = imgUrl;
         this.imgName = imgName;
