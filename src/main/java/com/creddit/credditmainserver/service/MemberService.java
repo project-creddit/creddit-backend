@@ -21,17 +21,23 @@ public class MemberService {
 
 
     @Transactional
-    public Follower follw(String nickname, Principal principal){
-        Long follower = Long.parseLong(principal.getName());
+    public Long follw(String nickname, Principal principal) throws Exception{
+        Member follower = memberRepository.findById(Long.parseLong(principal.getName())).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 memberId =" + Long.parseLong(principal.getName())));
         Member following = memberRepository.findByNickname(nickname).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 nickname =" + nickname));
+
+        if(followRepository.findByFollowingAndAndFollower(following.getId(), follower).isPresent()){
+            throw new IllegalArgumentException("이미 팔로우한 회원입니다.");
+        }
         Follower follow = new Follower(follower, following.getId());
-        return followRepository.save(follow);
+
+        return followRepository.save(follow).getId();
     }
 
     @Transactional
     public Long deleteFollow(String nickname, Principal principal){
+        Member follower = memberRepository.findById(Long.parseLong(principal.getName())).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 memberId =" + Long.parseLong(principal.getName())));
         Member following = memberRepository.findByNickname(nickname).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 nickname =" + nickname));
-        Follower follow = followRepository.findByFollowingAndAndFollwer(following.getId(),Long.parseLong(principal.getName())).orElseThrow();
+        Follower follow = followRepository.findByFollowingAndAndFollower(following.getId(),follower).orElseThrow();
         followRepository.deleteAllById(follow.getId());
         return follow.getId();
     }
