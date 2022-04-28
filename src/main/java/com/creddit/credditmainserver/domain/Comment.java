@@ -29,8 +29,7 @@ public class Comment extends BaseTimeEntity{
 
     private Long parentCommentId;
 
-    @NotNull(message = "내용은 빈 칸일 수 없습니다.")
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, length = 2000)
     private String content;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.PERSIST, orphanRemoval = true)
