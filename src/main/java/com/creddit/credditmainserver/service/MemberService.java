@@ -1,11 +1,13 @@
 package com.creddit.credditmainserver.service;
 
 import com.creddit.credditmainserver.domain.Member;
+import com.creddit.credditmainserver.dto.request.PasswordRequestDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
 import com.creddit.credditmainserver.repository.FollowRepository;
 import com.creddit.credditmainserver.repository.MemberCustomRepository;
 import com.creddit.credditmainserver.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.creddit.credditmainserver.domain.*;
@@ -18,7 +20,7 @@ public class MemberService {
     private final MemberCustomRepository memberCustomRepository;
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
-
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Long follw(String nickname, Principal principal) throws Exception{
@@ -60,5 +62,11 @@ public class MemberService {
         memberRepository.save(member);
 
        return new MemberResponseDto(member);
+    }
+    @Transactional
+    public Long changePassword(PasswordRequestDto passwordRequestDto, Long id){
+        Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 memberId =" + id));
+        member.setPassword(passwordEncoder.encode(passwordRequestDto.getPassword()));
+        return memberRepository.save(member).getId();
     }
 }
