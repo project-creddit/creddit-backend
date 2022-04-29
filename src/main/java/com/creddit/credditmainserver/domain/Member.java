@@ -14,7 +14,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
-public class Member{
+public class Member extends BaseTimeEntity{
 
     @Id @GeneratedValue
     @Column(name="member_id")
@@ -37,8 +37,9 @@ public class Member{
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+    private List<Follower> followings = new ArrayList<>();
 
     public void setProfile(String imgUrl, String imgName, String introduction){
         this.imgUrl = imgUrl;
