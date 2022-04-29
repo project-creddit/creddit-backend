@@ -1,12 +1,19 @@
 spring:
   config:
     import: application-aws.yml
-
   datasource:
     url: jdbc:h2:tcp://localhost/~/creddit-main-server
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: 이메일주소@naver.com
+    password:  비밀번호
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable : true
 
   jpa:
     hibernate:
