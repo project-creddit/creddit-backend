@@ -1,6 +1,7 @@
 package com.creddit.credditmainserver.api;
 
 import com.creddit.credditmainserver.domain.Follower;
+import com.creddit.credditmainserver.dto.response.FollowListResponseDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
 import com.creddit.credditmainserver.service.MemberService;
 import io.swagger.annotations.Api;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @Api(tags = {"회원가입 시 중복 체크"})
 @RestController
@@ -18,6 +20,11 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+    @Operation(summary = "following list")
+    @GetMapping("/follow/list")
+    public List<FollowListResponseDto> followList(Principal principal){
+        return memberService.followList(Long.parseLong(principal.getName()));
+    }
 
     @PostMapping("/follow")
     public Long follow(@RequestBody  String followingNickname, Principal principal) throws Exception {

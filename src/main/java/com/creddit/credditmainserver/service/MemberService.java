@@ -1,6 +1,7 @@
 package com.creddit.credditmainserver.service;
 
 import com.creddit.credditmainserver.domain.Member;
+import com.creddit.credditmainserver.dto.response.FollowListResponseDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
 import com.creddit.credditmainserver.repository.FollowRepository;
 import com.creddit.credditmainserver.repository.MemberCustomRepository;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.creddit.credditmainserver.domain.*;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +23,17 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
 
+
+    @Transactional
+    public List<FollowListResponseDto> followList(Long id){
+        Member member = memberRepository.findById(id).orElseThrow();
+        List<Follower> followers = followRepository.findAllByFollower(member);
+        List<Member> list = new ArrayList<>();
+        followers.forEach(o->
+                list.add(memberRepository.findById(o.getFollowing()).orElseThrow()));
+
+        return list.stream().map(Member::memberToFollowList).collect(Collectors.toList());
+    }
 
     @Transactional
     public Long follw(String nickname, Principal principal) throws Exception{

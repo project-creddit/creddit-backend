@@ -1,5 +1,6 @@
 package com.creddit.credditmainserver.domain;
 
+import com.creddit.credditmainserver.dto.response.FollowListResponseDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +43,10 @@ public class Member{
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
     private List<Follower> followings = new ArrayList<>();
+
+    public FollowListResponseDto memberToFollowList(){
+        return new FollowListResponseDto(email,nickname,imgUrl, imgName);
+    }
 
     public void setProfile(String imgUrl, String imgName, String introduction){
         this.imgUrl = imgUrl;
