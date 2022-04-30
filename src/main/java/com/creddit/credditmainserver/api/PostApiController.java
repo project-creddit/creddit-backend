@@ -46,7 +46,7 @@ public class PostApiController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "lastPostId", value = "마지막 글의 ID"),
             @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
-            @ApiImplicitParam(name = "nickname", value = "팔로잉할 유저 닉네임")
+            @ApiImplicitParam(name = "nickname", value = "유저 닉네임")
     })
     @GetMapping("/post/user/{nickname}")
     public List<PostResponseDto> getPostPageByUser(

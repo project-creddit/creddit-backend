@@ -22,7 +22,7 @@ public class CommentApiController {
     @ApiOperation(value = "댓글 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "postId", value = "글 ID"),
-            @ApiImplicitParam(name = "lastPostId", value = "마지막 댓글의 ID"),
+            @ApiImplicitParam(name = "lastCommentId", value = "마지막 댓글의 ID"),
             @ApiImplicitParam(name = "size", value = "불러올 댓글의 개수"),
             @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like")
     })
