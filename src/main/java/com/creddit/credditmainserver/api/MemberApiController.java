@@ -1,6 +1,7 @@
 package com.creddit.credditmainserver.api;
 
 import com.creddit.credditmainserver.domain.Follower;
+import com.creddit.credditmainserver.dto.response.FollowListResponseDto;
 import com.creddit.credditmainserver.dto.request.PasswordRequestDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
 import com.creddit.credditmainserver.service.EmailSendService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Api(tags = {"회원가입 시 중복 체크 / 팔로우 / 비밀번호찾기"})
 @RestController
@@ -21,6 +23,13 @@ import java.security.Principal;
 public class MemberApiController {
     private final EmailSendService emailSendService;
     private final MemberService memberService;
+
+    @Operation(summary = "following list")
+    @GetMapping("/follow/list")
+    public List<FollowListResponseDto> followList(Principal principal){
+        return memberService.followList(Long.parseLong(principal.getName()));
+    }
+
 
     @Operation(summary="팔로우 기능", description=" return: 멤버아이디")
     @PostMapping("/follow")
