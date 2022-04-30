@@ -23,6 +23,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final CommentService commentService;
 
     @Transactional
     public Long createPost(PostRequestDto postRequestDto){
@@ -54,9 +55,20 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    public List<PostResponseDto> fetchPostPagesBy(Long lastPostId, int size) {
+    public List<PostResponseDto> fetchPostPagesBy(Long lastPostId, int size, String sort) {
         PageRequest pageRequest = PageRequest.of(0, size);
-        Page<Post> posts = postRepository.findByIdLessThanOrderByIdDesc(lastPostId, pageRequest);
+        Page<Post> posts;
+
+        if(sort.equals("like")){
+            posts = postRepository.findByPageOfLikes(lastPostId, pageRequest);
+        }else if(sort.equals("following")){
+            Long currentMemberId = SecurityUtil.getCurrentMemberId();
+            Member member = memberRepository.getById(currentMemberId);
+
+            posts = postRepository.findByPageOfFollowing(lastPostId, member, pageRequest);
+        }else{
+            posts = postRepository.findByIdLessThanOrderByIdDesc(lastPostId, pageRequest);
+        }
 
         return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
     }
@@ -65,12 +77,25 @@ public class PostService {
         Post entity = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
 
-        return new PostResponseDto(entity);
+        PostResponseDto responseDto = new PostResponseDto(entity);
+        responseDto.addCommentList(commentService.fetchCommentPagesBy(id, Long.MAX_VALUE, 10, "new"));
+
+        return responseDto;
     }
 
     public List<PostResponseDto> searchPostByKeyword(Long lastPostId, int size, String keyword){
         PageRequest pageRequest = PageRequest.of(0, size);
         Page<Post> posts = postRepository.findByPageOfSearching(lastPostId, keyword, pageRequest);
+
+        return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
+    }
+
+    public List<PostResponseDto> getPostPageByUser(Long lastPostId, int size, String nickname) {
+        Member member = memberRepository.findByNickname(nickname)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 없습니다. nickname = " + nickname));
+
+        PageRequest pageRequest = PageRequest.of(0, size);
+        Page<Post> posts = postRepository.findByIdLessThanAndMemberIdOrderByIdDesc(lastPostId, member.getId(), pageRequest);
 
         return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
     }

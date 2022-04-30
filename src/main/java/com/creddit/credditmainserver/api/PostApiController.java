@@ -24,17 +24,37 @@ public class PostApiController {
     @ApiOperation(value = "메인화면 글 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "lastPostId", value = "마지막 글의 ID"),
-            @ApiImplicitParam(name = "size", value = "불러올 글의 개수")
+            @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
+            @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like, following")
     })
     @GetMapping("/post")
-    public List<PostResponseDto> getPostPage(@RequestParam Long lastPostId, @RequestParam int size){
-        return postService.fetchPostPagesBy(lastPostId, size);
+    public List<PostResponseDto> getPostPage(
+            @RequestParam Long lastPostId,
+            @RequestParam int size,
+            @RequestParam String sort
+    ){
+        return postService.fetchPostPagesBy(lastPostId, size, sort);
     }
 
     @ApiOperation(value = "글 상세화면 조회")
     @GetMapping("/post/{id}")
     public PostResponseDto selectOnePost(@PathVariable Long id){
         return postService.findById(id);
+    }
+
+    @ApiOperation(value = "특정 유저가 작성한 글 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "lastPostId", value = "마지막 글의 ID"),
+            @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
+            @ApiImplicitParam(name = "nickname", value = "유저 닉네임")
+    })
+    @GetMapping("/post/user/{nickname}")
+    public List<PostResponseDto> getPostPageByUser(
+            @RequestParam Long lastPostId,
+            @RequestParam int size,
+            @PathVariable String nickname
+    ){
+        return  postService.getPostPageByUser(lastPostId, size, nickname);
     }
 
     @ApiOperation(value = "글 검색")

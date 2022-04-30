@@ -19,16 +19,17 @@ public class Post extends BaseTimeEntity{
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(nullable = false, length = 2000)
     private String content;
 
     private String imgName;
 
     private String imgUrl;
 
+    @OrderBy("id DESC")
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 

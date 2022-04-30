@@ -1,9 +1,9 @@
 package com.creddit.credditmainserver.api;
 
-import com.creddit.credditmainserver.dto.request.LikeRequestDto;
 import com.creddit.credditmainserver.service.LikeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,23 +15,14 @@ public class LikeApiController {
 
     private final LikeService likeService;
 
-    @ApiOperation(value = "글 좋아요 생성")
-    @ApiImplicitParam(name = "requestDto", value = "글 ID")
-    @PostMapping("/like/post")
-    public Long createPostLike(@RequestBody LikeRequestDto likeRequestDto){
-        return likeService.createPostLike(likeRequestDto);
+    @ApiOperation(value = "좋아요", notes = "좋아요가 없다면 생성, 있다면 삭제")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "글 혹은 댓글 ID"),
+            @ApiImplicitParam(name = "type", value = "ID 타입 ex) post, comment")
+    })
+    @PostMapping("/like/{id}")
+    public void clickLike(@PathVariable Long id, @RequestParam String type){
+        likeService.clickLike(id, type);
     }
 
-    @ApiOperation(value = "댓글 좋아요 생성")
-    @ApiImplicitParam(name = "requestDto", value = "댓글 ID")
-    @PostMapping("/like/comment")
-    public Long createCommentLike(@RequestBody LikeRequestDto likeRequestDto){
-        return likeService.createCommentLike(likeRequestDto);
-    }
-
-    @ApiOperation(value = "좋아요 삭제", notes = "글 or 댓글 ID 필수")
-    @DeleteMapping("/like/{id}")
-    public void deleteLike(@PathVariable Long id){
-        likeService.deleteLike(id);
-    }
 }
