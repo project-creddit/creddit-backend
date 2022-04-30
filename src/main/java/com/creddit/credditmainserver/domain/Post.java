@@ -29,6 +29,7 @@ public class Post extends BaseTimeEntity{
 
     private String imgUrl;
 
+    @OrderBy("id DESC")
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
