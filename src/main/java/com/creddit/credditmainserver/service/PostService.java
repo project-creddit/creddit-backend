@@ -90,9 +90,9 @@ public class PostService {
         return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
     }
 
-    public List<PostResponseDto> getPostPageByUser(Long lastPostId, int size, String email) {
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("유저가 없습니다. email = " + email));
+    public List<PostResponseDto> getPostPageByUser(Long lastPostId, int size, String nickname) {
+        Member member = memberRepository.findByNickname(nickname)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 없습니다. nickname = " + nickname));
 
         PageRequest pageRequest = PageRequest.of(0, size);
         Page<Post> posts = postRepository.findByIdLessThanAndMemberIdOrderByIdDesc(lastPostId, member.getId(), pageRequest);

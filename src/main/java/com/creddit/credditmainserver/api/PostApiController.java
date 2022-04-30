@@ -43,13 +43,18 @@ public class PostApiController {
     }
 
     @ApiOperation(value = "특정 유저가 작성한 글 조회")
-    @GetMapping("/post/user/{email}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "lastPostId", value = "마지막 글의 ID"),
+            @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
+            @ApiImplicitParam(name = "nickname", value = "팔로잉할 유저 닉네임")
+    })
+    @GetMapping("/post/user/{nickname}")
     public List<PostResponseDto> getPostPageByUser(
             @RequestParam Long lastPostId,
             @RequestParam int size,
-            @PathVariable String email
+            @PathVariable String nickname
     ){
-        return  postService.getPostPageByUser(lastPostId, size, email);
+        return  postService.getPostPageByUser(lastPostId, size, nickname);
     }
 
     @ApiOperation(value = "글 검색")
