@@ -4,7 +4,6 @@ import com.creddit.credditmainserver.domain.Comment;
 import com.creddit.credditmainserver.domain.Like;
 import com.creddit.credditmainserver.domain.Member;
 import com.creddit.credditmainserver.domain.Post;
-import com.creddit.credditmainserver.dto.request.LikeRequestDto;
 import com.creddit.credditmainserver.login.security.SecurityUtil;
 import com.creddit.credditmainserver.repository.CommentRepository;
 import com.creddit.credditmainserver.repository.LikeRepository;
@@ -24,24 +23,41 @@ public class LikeService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public Long createPostLike(LikeRequestDto likeRequestDto){
+    public void clickLike(Long id, String type){
         Member member = memberRepository.getById(SecurityUtil.getCurrentMemberId());
-        Post post = postRepository.getById(likeRequestDto.getPostId());
+        boolean isLiked = isLiked(id, type, member.getId());
 
-        return likeRepository.save(likeRequestDto.postLikeToEntity(member, post)).getId();
+        if(isLiked){
+            Like like = checkTypeAndGetLike(id, type, member.getId());
+            likeRepository.delete(like);
+        }else{
+            checkTypeAndSaveLike(id, type, member);
+        }
     }
 
-    public Long createCommentLike(LikeRequestDto likeRequestDto){
-        Member member = memberRepository.getById(SecurityUtil.getCurrentMemberId());
-        Comment comment = commentRepository.getById(likeRequestDto.getCommentId());
+    private boolean isLiked(Long id, String type, Long memberId) {
+        Like like = checkTypeAndGetLike(id, type, memberId);
 
-        return likeRepository.save(likeRequestDto.commentLikeToEntity(member, comment)).getId();
+        return like != null;
     }
-    
-    public void deleteLike(Long id){
-        Like like = likeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("좋아요가 없습니다. id = " + id));
 
-        likeRepository.delete(like);
+    private Like checkTypeAndGetLike(Long id, String type, Long memberId) {
+        if(type.equals("post")){
+            return likeRepository.findByPostIdAndMemberId(id, memberId);
+        }else{
+            return likeRepository.findByCommentIdAndMemberId(id, memberId);
+        }
+    }
+
+    private void checkTypeAndSaveLike(Long id, String type, Member member) {
+        Like like = new Like();
+
+        if(type.equals("post")){
+            Post post = postRepository.getById(id);
+            likeRepository.save(like.createPostLike(member, post));
+        }else{
+            Comment comment = commentRepository.getById(id);
+            likeRepository.save(like.createCommentLike(member, comment));
+        }
     }
 }
