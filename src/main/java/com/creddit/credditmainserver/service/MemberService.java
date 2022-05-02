@@ -5,7 +5,6 @@ import com.creddit.credditmainserver.dto.response.FollowListResponseDto;
 import com.creddit.credditmainserver.dto.request.PasswordRequestDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
 import com.creddit.credditmainserver.repository.FollowRepository;
-import com.creddit.credditmainserver.repository.MemberCustomRepository;
 import com.creddit.credditmainserver.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberCustomRepository memberCustomRepository;
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
     private final PasswordEncoder passwordEncoder;
@@ -62,12 +60,12 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public boolean checkDuplicateByEmail(String email){
-        return memberCustomRepository.checkDuplicateByEmail(email);
+        return memberRepository.existsByEmail(email);
     }
 
     @Transactional(readOnly = true)
     public boolean checkDuplicateByNickname(String nickname){
-        return memberCustomRepository.checkDuplicateByNickname(nickname);
+        return memberRepository.existByNickname(nickname);
     }
 
     @Transactional
