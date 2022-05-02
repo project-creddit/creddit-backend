@@ -2,6 +2,7 @@ package com.creddit.credditmainserver.dto.response;
 
 import com.creddit.credditmainserver.domain.Image;
 import com.creddit.credditmainserver.domain.Post;
+import com.creddit.credditmainserver.login.security.SecurityUtil;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -40,8 +41,8 @@ public class PostResponseDto {
 
         this.isLiked = post.getLikes().stream().anyMatch(
                 like -> like.getMember()
-                        .getEmail()
-                        .equals(member.getEmail())
+                        .getId()
+                        .equals(SecurityUtil.getCurrentMemberId())
         ) ? true : false;
     }
 }

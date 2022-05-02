@@ -73,10 +73,10 @@ public class PostService {
     }
 
     public PostResponseDto findById(Long id) {
-        Post entity = postRepository.findById(id)
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
 
-        return new PostResponseDto(entity);
+        return new PostResponseDto(post);
     }
 
     public List<PostResponseDto> searchPostByKeyword(Long lastPostId, int size, String keyword){
