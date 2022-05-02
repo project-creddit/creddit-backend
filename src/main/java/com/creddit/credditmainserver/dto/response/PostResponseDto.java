@@ -18,7 +18,6 @@ public class PostResponseDto {
     private Long comments;
     private Long likes;
     private boolean isLiked;
-    private List<CommentResponseDto> commentList;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
@@ -44,9 +43,5 @@ public class PostResponseDto {
                         .getEmail()
                         .equals(member.getEmail())
         ) ? true : false;
-    }
-
-    public void addCommentList(List<CommentResponseDto> commentList){
-        this.commentList = commentList;
     }
 }

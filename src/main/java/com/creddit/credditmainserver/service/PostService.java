@@ -23,7 +23,6 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
-    private final CommentService commentService;
 
     @Transactional
     public Long createPost(PostRequestDto postRequestDto){
@@ -77,10 +76,7 @@ public class PostService {
         Post entity = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
 
-        PostResponseDto responseDto = new PostResponseDto(entity);
-        responseDto.addCommentList(commentService.fetchCommentPagesBy(id, Long.MAX_VALUE, 10, "new"));
-
-        return responseDto;
+        return new PostResponseDto(entity);
     }
 
     public List<PostResponseDto> searchPostByKeyword(Long lastPostId, int size, String keyword){
