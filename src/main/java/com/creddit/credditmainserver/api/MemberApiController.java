@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -84,9 +85,9 @@ public class MemberApiController {
     })
     @GetMapping("/search")
     public List<MemberResponseDto> searchPost(
-            @RequestParam int size,
+            final Pageable pageable,
             @RequestParam String keyword
-    ){
-        return memberService.findUserBySearch(size, keyword);
+            ){
+        return memberService.findUserBySearch(pageable, keyword);
     }
 }
