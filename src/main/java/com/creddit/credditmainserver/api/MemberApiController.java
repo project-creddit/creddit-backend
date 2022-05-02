@@ -4,9 +4,13 @@ import com.creddit.credditmainserver.domain.Follower;
 import com.creddit.credditmainserver.dto.response.FollowListResponseDto;
 import com.creddit.credditmainserver.dto.request.PasswordRequestDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
+import com.creddit.credditmainserver.dto.response.PostResponseDto;
 import com.creddit.credditmainserver.service.EmailSendService;
 import com.creddit.credditmainserver.service.MemberService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +20,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
-@Api(tags = {"회원가입 시 중복 체크 / 팔로우 / 비밀번호찾기"})
+@Api(tags = {"회원가입 시 중복 체크 / 팔로우 / 비밀번호찾기 / 검색"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -71,5 +75,18 @@ public class MemberApiController {
     @PostMapping("/changePassword")
     public Long changePassword(@RequestBody @Valid PasswordRequestDto passwordRequestDto,Principal principal){
         return memberService.changePassword(passwordRequestDto, Long.parseLong(principal.getName()));
+    }
+
+    @ApiOperation(value = "유저 검색")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "size", value = "불러올 유저의 개수"),
+            @ApiImplicitParam(name = "keyword", value = "검색할 키워드")
+    })
+    @GetMapping("/search")
+    public List<MemberResponseDto> searchPost(
+            @RequestParam int size,
+            @RequestParam String keyword
+    ){
+        return memberService.findUserBySearch(size, keyword);
     }
 }
