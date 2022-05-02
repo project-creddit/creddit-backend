@@ -65,7 +65,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public boolean checkDuplicateByNickname(String nickname){
-        return memberRepository.existByNickname(nickname);
+        return memberRepository.existsByNickname(nickname);
     }
 
     @Transactional
