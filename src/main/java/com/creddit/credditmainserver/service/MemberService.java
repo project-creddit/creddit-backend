@@ -4,9 +4,12 @@ import com.creddit.credditmainserver.domain.Member;
 import com.creddit.credditmainserver.dto.response.FollowListResponseDto;
 import com.creddit.credditmainserver.dto.request.PasswordRequestDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
+import com.creddit.credditmainserver.dto.response.PostResponseDto;
 import com.creddit.credditmainserver.repository.FollowRepository;
 import com.creddit.credditmainserver.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,5 +84,12 @@ public class MemberService {
         Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 memberId =" + id));
         member.setPassword(passwordEncoder.encode(passwordRequestDto.getPassword()));
         return memberRepository.save(member).getId();
+    }
+
+    public List<MemberResponseDto> findUserBySearch(int size, String keyword){
+        PageRequest pageRequest = PageRequest.of(0, size);
+        Page<Member> members = memberRepository.findBySearch(keyword, pageRequest);
+
+        return members.stream().map(MemberResponseDto::new).collect(Collectors.toList());
     }
 }
