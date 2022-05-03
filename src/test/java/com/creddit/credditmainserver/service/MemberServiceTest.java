@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,8 +43,8 @@ public class MemberServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 2);
 
 //        // when
-        List<MemberResponseDto> members = memberService.findUserBySearch(pageRequest, "테스트");
-
+        Page<Member> memberPages = memberService.findUserBySearch(pageRequest, "테스트");
+        List<MemberResponseDto> members = memberPages.stream().map(MemberResponseDto::new).collect(Collectors.toList());
         //then
         MemberResponseDto member2 = members.get(0);
         assertThat(member2.getNickname()).isEqualTo(nickName2);
@@ -68,7 +70,8 @@ public class MemberServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 2);
 
 //        // when
-        List<MemberResponseDto> members = memberService.findUserBySearch(pageRequest, "test");
+        Page<Member> memberPages = memberService.findUserBySearch(pageRequest, "test");
+        List<MemberResponseDto> members = memberPages.stream().map(MemberResponseDto::new).collect(Collectors.toList());
 
         //then
         MemberResponseDto member2 = members.get(0);
@@ -95,10 +98,10 @@ public class MemberServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 2);
 
         // when
-        List<MemberResponseDto> members = memberService.findUserBySearch(pageRequest, "안녕");
+        Page<Member> members = memberService.findUserBySearch(pageRequest, "안녕");
 
         //then
-        assertThat(members.size()).isEqualTo(0);
+        assertThat(members.getTotalPages()).isEqualTo(0);
     }
 
     @Test
@@ -116,7 +119,8 @@ public class MemberServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 2);
 
         // when
-        List<MemberResponseDto> members = memberService.findUserBySearch(pageRequest, "oereo@gmail.com");
+        Page<Member> memberPages = memberService.findUserBySearch(pageRequest, "oereo@gmail.com");
+        List<MemberResponseDto> members = memberPages.stream().map(MemberResponseDto::new).collect(Collectors.toList());
 
         //then
         assertThat(members.size()).isEqualTo(0);
