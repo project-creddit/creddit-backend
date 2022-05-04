@@ -59,7 +59,9 @@ public class PostService {
         Page<Post> posts;
 
         if(sort.equals("like")){
-            posts = postRepository.findByPageOfLikes(lastPostId, pageRequest);
+            int page = Math.toIntExact(lastPostId);
+
+            posts = postRepository.findByPageOfLikes(PageRequest.of(page, size));
         }else if(sort.equals("following")){
             Long currentMemberId = SecurityUtil.getCurrentMemberId();
             Member member = memberRepository.getById(currentMemberId);
@@ -73,10 +75,10 @@ public class PostService {
     }
 
     public PostResponseDto findById(Long id) {
-        Post entity = postRepository.findById(id)
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
 
-        return new PostResponseDto(entity);
+        return new PostResponseDto(post);
     }
 
     public List<PostResponseDto> searchPostByKeyword(Long lastPostId, int size, String keyword){
