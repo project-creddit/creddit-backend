@@ -33,7 +33,9 @@ public class CommentService {
         Page<Comment> comments;
 
         if(sort.equals("like")){
-            comments = commentRepository.findByPageOfLikes(postId, lastCommentId, pageRequest);
+            int page = Math.toIntExact(lastCommentId);
+
+            comments = commentRepository.findByPageOfLikes(postId, PageRequest.of(page, size));
         }else{
             comments = commentRepository.findByIdLessThanAndPostIdOrderByIdDesc(lastCommentId, postId, pageRequest);
         }

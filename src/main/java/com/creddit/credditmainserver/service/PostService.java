@@ -59,7 +59,9 @@ public class PostService {
         Page<Post> posts;
 
         if(sort.equals("like")){
-            posts = postRepository.findByPageOfLikes(lastPostId, pageRequest);
+            int page = Math.toIntExact(lastPostId);
+
+            posts = postRepository.findByPageOfLikes(PageRequest.of(page, size));
         }else if(sort.equals("following")){
             Long currentMemberId = SecurityUtil.getCurrentMemberId();
             Member member = memberRepository.getById(currentMemberId);
