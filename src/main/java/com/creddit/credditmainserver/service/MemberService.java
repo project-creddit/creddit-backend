@@ -1,17 +1,19 @@
 package com.creddit.credditmainserver.service;
 
+import com.creddit.credditmainserver.domain.Follower;
 import com.creddit.credditmainserver.domain.Member;
-import com.creddit.credditmainserver.dto.response.FollowListResponseDto;
 import com.creddit.credditmainserver.dto.request.PasswordRequestDto;
+import com.creddit.credditmainserver.dto.response.FollowListResponseDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
 import com.creddit.credditmainserver.repository.FollowRepository;
-import com.creddit.credditmainserver.repository.MemberCustomRepository;
 import com.creddit.credditmainserver.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.creddit.credditmainserver.domain.*;
+
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberCustomRepository memberCustomRepository;
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
     private final PasswordEncoder passwordEncoder;
@@ -62,12 +63,12 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public boolean checkDuplicateByEmail(String email){
-        return memberCustomRepository.checkDuplicateByEmail(email);
+        return memberRepository.existsByEmail(email);
     }
 
     @Transactional(readOnly = true)
     public boolean checkDuplicateByNickname(String nickname){
-        return memberCustomRepository.checkDuplicateByNickname(nickname);
+        return memberRepository.existsByNickname(nickname);
     }
 
     @Transactional
@@ -83,5 +84,10 @@ public class MemberService {
         Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 memberId =" + id));
         member.setPassword(passwordEncoder.encode(passwordRequestDto.getPassword()));
         return memberRepository.save(member).getId();
+    }
+
+    public Page<Member> findUserBySearch(Pageable pageable, String keyword){
+
+        return memberRepository.findBySearch(keyword, pageable);
     }
 }
