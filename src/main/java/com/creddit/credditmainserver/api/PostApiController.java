@@ -23,17 +23,17 @@ public class PostApiController {
 
     @ApiOperation(value = "메인화면 글 조회")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "lastPostId", value = "마지막 글의 ID"),
+            @ApiImplicitParam(name = "index", value = "최신 or 팔로잉 정렬 : 마지막 글의 ID, 좋아요 정렬 : 페이지 번호"),
             @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
             @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like, following")
     })
     @GetMapping("/post")
     public List<PostResponseDto> getPostPage(
-            @RequestParam Long lastPostId,
+            @RequestParam Long index,
             @RequestParam int size,
             @RequestParam String sort
     ){
-        return postService.fetchPostPagesBy(lastPostId, size, sort);
+        return postService.fetchPostPagesBy(index, size, sort);
     }
 
     @ApiOperation(value = "글 상세화면 조회")
