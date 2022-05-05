@@ -2,6 +2,7 @@ package com.creddit.credditmainserver.api;
 
 import com.creddit.credditmainserver.dto.request.CommentRequestDto;
 import com.creddit.credditmainserver.dto.response.CommentResponseDto;
+import com.creddit.credditmainserver.dto.response.DetailCommentResponseDto;
 import com.creddit.credditmainserver.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,7 +44,7 @@ public class CommentApiController {
             @ApiImplicitParam(name = "size", value = "불러올 댓글의 개수")
     })
     @GetMapping("/comment/detail")
-    public List<CommentResponseDto> getDetailComments(
+    public List<DetailCommentResponseDto> getDetailComments(
             @RequestParam Long parentCommentId,
             @RequestParam Long lastCommentId,
             @RequestParam int size

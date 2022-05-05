@@ -5,6 +5,7 @@ import com.creddit.credditmainserver.domain.Member;
 import com.creddit.credditmainserver.domain.Post;
 import com.creddit.credditmainserver.dto.request.CommentRequestDto;
 import com.creddit.credditmainserver.dto.response.CommentResponseDto;
+import com.creddit.credditmainserver.dto.response.DetailCommentResponseDto;
 import com.creddit.credditmainserver.login.security.SecurityUtil;
 import com.creddit.credditmainserver.repository.CommentRepository;
 import com.creddit.credditmainserver.repository.MemberRepository;
@@ -44,11 +45,11 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> getDetailComments(Long parentCommentId, Long lastCommentId, int size) {
+    public List<DetailCommentResponseDto> getDetailComments(Long parentCommentId, Long lastCommentId, int size) {
         PageRequest pageRequest = PageRequest.of(0, size);
         Page<Comment> comments = commentRepository.findByIdLessThanAndParentCommentIdOrderByIdDesc(lastCommentId, parentCommentId, pageRequest);
 
-        return comments.stream().map(CommentResponseDto::new).collect(Collectors.toList());
+        return comments.stream().map(DetailCommentResponseDto::new).collect(Collectors.toList());
     }
 
     public Long createComment(CommentRequestDto commentRequestDto){
