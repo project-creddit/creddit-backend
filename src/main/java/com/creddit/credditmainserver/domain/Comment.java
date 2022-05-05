@@ -4,9 +4,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +34,9 @@ public class Comment extends BaseTimeEntity{
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
+
+    @Formula("(select count(1) from comment c where c.parent_comment_id = comment_id)")
+    private Long detailCommentCount;
 
     @Builder
     public Comment(Member member, Post post, String content, Long parentCommentId) {

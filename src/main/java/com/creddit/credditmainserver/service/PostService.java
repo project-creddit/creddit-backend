@@ -54,21 +54,21 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    public List<PostResponseDto> fetchPostPagesBy(Long lastPostId, int size, String sort) {
+    public List<PostResponseDto> fetchPostPagesBy(Long index, int size, String sort) {
         PageRequest pageRequest = PageRequest.of(0, size);
         Page<Post> posts;
 
         if(sort.equals("like")){
-            int page = Math.toIntExact(lastPostId);
+            int page = Math.toIntExact(index);
 
             posts = postRepository.findByPageOfLikes(PageRequest.of(page, size));
         }else if(sort.equals("following")){
             Long currentMemberId = SecurityUtil.getCurrentMemberId();
             Member member = memberRepository.getById(currentMemberId);
 
-            posts = postRepository.findByPageOfFollowing(lastPostId, member, pageRequest);
+            posts = postRepository.findByPageOfFollowing(index, member, pageRequest);
         }else{
-            posts = postRepository.findByIdLessThanOrderByIdDesc(lastPostId, pageRequest);
+            posts = postRepository.findByIdLessThanOrderByIdDesc(index, pageRequest);
         }
 
         return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());

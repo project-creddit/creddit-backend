@@ -4,15 +4,17 @@ import com.creddit.credditmainserver.domain.Image;
 import com.creddit.credditmainserver.domain.Post;
 import com.creddit.credditmainserver.login.security.SecurityUtil;
 import lombok.Getter;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collections;
 
 @Getter
 public class PostResponseDto {
 
     private Long id;
     private MemberResponseDto member;
+    private Image profile;
     private String title;
     private String content;
     private Image image;
@@ -39,10 +41,21 @@ public class PostResponseDto {
                 .imgUrl(post.getImgUrl())
                 .build();
 
-        this.isLiked = post.getLikes().stream().anyMatch(
-                like -> like.getMember()
-                        .getId()
-                        .equals(SecurityUtil.getCurrentMemberId())
-        ) ? true : false;
+        this.profile = Image.builder()
+                .imgName(post.getMember().getImgName())
+                .imgUrl(post.getMember().getImgUrl())
+                .build();
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(principal.equals("anonymousUser")){
+            this.isLiked = false;
+        }else{
+            this.isLiked = post.getLikes().stream().anyMatch(
+                    like -> like.getMember()
+                            .getId()
+                            .equals(SecurityUtil.getCurrentMemberId())
+            ) ? true : false;
+        }
     }
 }
