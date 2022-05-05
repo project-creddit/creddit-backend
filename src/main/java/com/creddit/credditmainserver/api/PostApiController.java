@@ -82,7 +82,7 @@ public class PostApiController {
             @RequestPart(value = "image", required = false) MultipartFile file,
             @RequestPart(value = "requestDto") PostRequestDto postRequestDto
     ){
-        if(file != null){
+        if(file != null && !file.isEmpty()){
             imageUpload(file, postRequestDto);
         }
 
@@ -102,7 +102,7 @@ public class PostApiController {
     ){
         String savedImgName = postService.findById(id).getImage().getImgName();
 
-        if(file != null){
+        if(file != null && !file.isEmpty()){
             checkExistImgAndDelete(savedImgName);
             imageUpload(file, postRequestDto);
         }
