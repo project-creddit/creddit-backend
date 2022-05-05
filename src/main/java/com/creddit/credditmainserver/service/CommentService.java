@@ -28,16 +28,16 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> fetchCommentPagesBy(Long postId, Long lastCommentId, int size, String sort) {
+    public List<CommentResponseDto> fetchCommentPagesBy(Long postId, Long index, int size, String sort) {
         PageRequest pageRequest = PageRequest.of(0, size);
         Page<Comment> comments;
 
         if(sort.equals("like")){
-            int page = Math.toIntExact(lastCommentId);
+            int page = Math.toIntExact(index);
 
             comments = commentRepository.findByPageOfLikes(postId, PageRequest.of(page, size));
         }else{
-            comments = commentRepository.findByIdLessThanAndPostIdOrderByIdDesc(lastCommentId, postId, pageRequest);
+            comments = commentRepository.findByIdLessThanAndPostIdOrderByIdDesc(index, postId, pageRequest);
         }
 
         return comments.stream().map(CommentResponseDto::new).collect(Collectors.toList());
