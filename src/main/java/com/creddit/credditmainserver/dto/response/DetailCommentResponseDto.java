@@ -1,6 +1,7 @@
 package com.creddit.credditmainserver.dto.response;
 
 import com.creddit.credditmainserver.domain.Comment;
+import com.creddit.credditmainserver.domain.Image;
 import com.creddit.credditmainserver.login.security.SecurityUtil;
 import lombok.Getter;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +14,7 @@ public class DetailCommentResponseDto {
     private Long commentId;
     private Long parentCommentId;
     private MemberResponseDto member;
+    private Image profile;
     private String content;
     private Long likes;
     private LocalDateTime createdDate;
@@ -28,6 +30,11 @@ public class DetailCommentResponseDto {
         this.modifiedDate = comment.getModifiedDate();
 
         this.member = new MemberResponseDto(comment.getMember());
+
+        this.profile = Image.builder()
+                .imgName(comment.getMember().getImgName())
+                .imgUrl(comment.getMember().getImgUrl())
+                .build();
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

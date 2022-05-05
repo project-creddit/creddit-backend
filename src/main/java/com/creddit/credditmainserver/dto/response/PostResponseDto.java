@@ -14,6 +14,7 @@ public class PostResponseDto {
 
     private Long id;
     private MemberResponseDto member;
+    private Image profile;
     private String title;
     private String content;
     private Image image;
@@ -38,6 +39,11 @@ public class PostResponseDto {
         this.image = Image.builder()
                 .imgName(post.getImgName())
                 .imgUrl(post.getImgUrl())
+                .build();
+
+        this.profile = Image.builder()
+                .imgName(post.getMember().getImgName())
+                .imgUrl(post.getMember().getImgUrl())
                 .build();
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
