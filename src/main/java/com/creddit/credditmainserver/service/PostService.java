@@ -54,19 +54,19 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    public List<PostResponseDto> fetchPostPagesBy(Long index, int size, String sort) {
+    public List<PostResponseDto> getPosts(Long index, int size, String sort) {
         PageRequest pageRequest = PageRequest.of(0, size);
         Page<Post> posts;
 
         if(sort.equals("like")){
             int page = Math.toIntExact(index);
 
-            posts = postRepository.findByPageOfLikes(PageRequest.of(page, size));
+            posts = postRepository.findByLikes(PageRequest.of(page, size));
         }else if(sort.equals("following")){
             Long currentMemberId = SecurityUtil.getCurrentMemberId();
             Member member = memberRepository.getById(currentMemberId);
 
-            posts = postRepository.findByPageOfFollowing(index, member, pageRequest);
+            posts = postRepository.findByFollowing(index, member, pageRequest);
         }else{
             posts = postRepository.findByIdLessThanOrderByIdDesc(index, pageRequest);
         }
@@ -81,14 +81,14 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    public List<PostResponseDto> searchPostByKeyword(Long lastPostId, int size, String keyword){
+    public List<PostResponseDto> searchPosts(Long lastPostId, int size, String keyword){
         PageRequest pageRequest = PageRequest.of(0, size);
-        Page<Post> posts = postRepository.findByPageOfSearching(lastPostId, keyword, pageRequest);
+        Page<Post> posts = postRepository.findBySearch(lastPostId, keyword, pageRequest);
 
         return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
     }
 
-    public List<PostResponseDto> getPostPageByUser(Long lastPostId, int size, String nickname) {
+    public List<PostResponseDto> getPostByUser(Long lastPostId, int size, String nickname) {
         Member member = memberRepository.findByNickname(nickname)
                 .orElseThrow(() -> new IllegalArgumentException("유저가 없습니다. nickname = " + nickname));
 

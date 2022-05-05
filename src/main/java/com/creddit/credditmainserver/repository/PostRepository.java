@@ -17,16 +17,16 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("select p from Post p left join p.likes l " +
             "group by p.id " +
             "order by count(l.post) desc, p.id desc")
-    Page<Post> findByPageOfLikes(Pageable pageable);
+    Page<Post> findByLikes(Pageable pageable);
 
     @Query("select p from Post p left join p.member m " +
             "where p.id < :id " +
             "and m.id in (select f.following from Follower f where f.follower = :member) " +
             "order by p.id desc" )
-    Page<Post> findByPageOfFollowing(@Param("id") Long id, @Param("member") Member member, Pageable pageable);
+    Page<Post> findByFollowing(@Param("id") Long id, @Param("member") Member member, Pageable pageable);
 
     @Query("select p from Post p " +
             "where p.id < :id and (p.title like %:keyword% or p.content like %:keyword%) " +
             "order by p.id desc")
-    Page<Post> findByPageOfSearching(@Param("id") Long id,@Param("keyword") String keyword, Pageable pageable);
+    Page<Post> findBySearch(@Param("id") Long id,@Param("keyword") String keyword, Pageable pageable);
 }
