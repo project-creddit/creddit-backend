@@ -27,13 +27,28 @@ public class CommentApiController {
             @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like")
     })
     @GetMapping("/comment")
-    public List<CommentResponseDto> getCommentPage(
+    public List<CommentResponseDto> getComments(
             @RequestParam Long postId,
             @RequestParam Long index,
             @RequestParam int size,
             @RequestParam String sort
     ){
-        return commentService.fetchCommentPagesBy(postId, index, size, sort);
+        return commentService.getComments(postId, index, size, sort);
+    }
+
+    @ApiOperation(value = "대댓글 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "parentCommentId", value = "상위 댓글 ID"),
+            @ApiImplicitParam(name = "lastCommentId", value = "마지막 대댓글의 ID"),
+            @ApiImplicitParam(name = "size", value = "불러올 댓글의 개수")
+    })
+    @GetMapping("/comment/detail")
+    public List<CommentResponseDto> getDetailComments(
+            @RequestParam Long parentCommentId,
+            @RequestParam Long lastCommentId,
+            @RequestParam int size
+    ){
+        return commentService.getDetailComments(parentCommentId, lastCommentId, size);
     }
 
     @ApiOperation(value = "댓글 작성", notes = "글 번호, 내용 필수값 / 내용 null, '', ' ' 모두 불가능")

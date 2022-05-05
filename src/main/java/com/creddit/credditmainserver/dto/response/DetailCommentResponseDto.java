@@ -8,24 +8,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.time.LocalDateTime;
 
 @Getter
-public class CommentResponseDto {
+public class DetailCommentResponseDto {
 
     private Long commentId;
-    private Long postId;
+    private Long parentCommentId;
     private MemberResponseDto member;
     private String content;
     private Long likes;
-    private boolean isLiked;
-    private Long detailCommentCount;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+    private boolean isLiked;
 
-    public CommentResponseDto(Comment comment){
+    public DetailCommentResponseDto(Comment comment){
         this.commentId = comment.getId();
-        this.postId = comment.getPost().getId();
+        this.parentCommentId = comment.getParentCommentId();
         this.content = comment.getContent();
         this.likes = comment.getLikes().stream().count();
-        this.detailCommentCount = comment.getDetailCommentCount();
         this.createdDate = comment.getCreatedDate();
         this.modifiedDate = comment.getModifiedDate();
 
