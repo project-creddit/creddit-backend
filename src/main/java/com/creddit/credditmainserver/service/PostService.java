@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,11 +33,11 @@ public class PostService {
     }
 
     @Transactional
-    public Long updatePost(Long id, PostRequestDto postRequestDto, boolean isBlankedFile) {
+    public Long updatePost(Long id, PostRequestDto postRequestDto, MultipartFile file) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다. id = " + id));
 
-        if(isBlankedFile || postRequestDto.getImgName() != null){
+        if((file != null && file.isEmpty()) || postRequestDto.getImgName() != null){
             post.updatePostAndImage(
                     postRequestDto.getTitle(),
                     postRequestDto.getContent(),
@@ -56,7 +57,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long id){
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다. id = " + id));
 
         postRepository.delete(post);
     }
@@ -83,7 +84,7 @@ public class PostService {
 
     public PostResponseDto findById(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다. id = " + id));
 
         return new PostResponseDto(post);
     }
@@ -97,11 +98,23 @@ public class PostService {
 
     public List<PostResponseDto> getPostByUser(Long lastPostId, int size, String nickname) {
         Member member = memberRepository.findByNickname(nickname)
-                .orElseThrow(() -> new IllegalArgumentException("유저가 없습니다. nickname = " + nickname));
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다. nickname = " + nickname));
 
         PageRequest pageRequest = PageRequest.of(0, size);
         Page<Post> posts = postRepository.findByIdLessThanAndMemberIdOrderByIdDesc(lastPostId, member.getId(), pageRequest);
 
         return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
+    }
+
+    public void isSameWriter(Long id, String keyword){
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("글이 존재하지 않습니다. id = " + id));
+
+        Long postMemberId = post.getMember().getId();
+        long currentMemberId = SecurityUtil.getCurrentMemberId();
+
+        if(postMemberId != currentMemberId){
+            throw new RuntimeException("작성자만 " + keyword + "할 수 있습니다.");
+        }
     }
 }

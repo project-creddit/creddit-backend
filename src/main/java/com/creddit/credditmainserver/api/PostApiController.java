@@ -100,41 +100,40 @@ public class PostApiController {
             @RequestPart(value = "image", required = false) MultipartFile file,
             @RequestPart(value = "requestDto") PostRequestDto postRequestDto
     ){
-        String savedImgName = postService.findById(id).getImage().getImgName();
-        boolean isBlankedFile = false;
+        postService.isSameWriter(id, "수정");
+        checkEmptyFileAndUploadImg(id, file, postRequestDto);
 
-        if(file != null){
-            checkExistImgAndDelete(savedImgName);
-
-            if(file.isEmpty()){
-                isBlankedFile = true;
-            }else{
-                imageUpload(file, postRequestDto);
-            }
-        }
-
-        return postService.updatePost(id, postRequestDto, isBlankedFile);
+        return postService.updatePost(id, postRequestDto, file);
     }
 
     @ApiOperation(value = "글 삭제")
     @DeleteMapping("/post/{id}")
     public void deletePost(@PathVariable Long id){
-        String savedImgName = postService.findById(id).getImage().getImgName();
-
-        checkExistImgAndDelete(savedImgName);
+        postService.isSameWriter(id, "삭제");
+        checkExistImgAndDelete(id);
         postService.deletePost(id);
     }
 
-    private void checkExistImgAndDelete(String savedImgName) {
+    private void checkEmptyFileAndUploadImg(Long id, MultipartFile file, PostRequestDto postRequestDto) {
+        if(file != null){
+            checkExistImgAndDelete(id);
+
+            if(!file.isEmpty()){
+                imageUpload(file, postRequestDto);
+            }
+        }
+    }
+
+    private void checkExistImgAndDelete(Long id) {
+        String savedImgName = postService.findById(id).getImage().getImgName();
+
         if (savedImgName != null) {
             awsS3Service.deleteFile(savedImgName);
         }
     }
 
-    private PostRequestDto imageUpload(MultipartFile file, PostRequestDto postRequestDto) {
+    private void imageUpload(MultipartFile file, PostRequestDto postRequestDto) {
         Image image = awsS3Service.upload(file, "post");
         postRequestDto.addImage(image);
-
-        return postRequestDto;
     }
 }
