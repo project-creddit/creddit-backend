@@ -74,4 +74,17 @@ public class CommentService {
 
         commentRepository.delete(comment);
     }
+
+    @Transactional(readOnly = true)
+    public void isSameWriter(Long id, String keyword){
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다. id = " + id));
+
+        Long commentMemberId = comment.getMember().getId();
+        long currentMemberId = SecurityUtil.getCurrentMemberId();
+
+        if(commentMemberId != currentMemberId){
+            throw new RuntimeException("작성자만 " + keyword + "할 수 있습니다.");
+        }
+    }
 }

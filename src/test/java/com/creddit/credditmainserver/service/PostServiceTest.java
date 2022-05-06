@@ -9,7 +9,11 @@ import com.creddit.credditmainserver.repository.PostRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,6 +28,7 @@ class PostServiceTest {
     @Autowired private MemberRepository memberRepository;
 
     @Test
+    @WithMockUser(username = "1", roles = "USER")
     public void 글_작성() throws Exception{
         // given
         String title = "테스트 제목";
@@ -43,18 +48,20 @@ class PostServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "1", roles = "USER")
     public void 글_수정() throws Exception{
         // given
         Long savedPostId = createPost(createMember(), "테스트 제목", "테스트 내용");
 
         String expectedTitle = "수정된 제목";
         String expectedContent = "수정된 내용";
+        MultipartFile file = new MockMultipartFile("test1", "test1.PNG", MediaType.IMAGE_PNG_VALUE, "test1".getBytes());
 
         Long updatedPostId = postService.updatePost(savedPostId, PostRequestDto.builder()
                 .title(expectedTitle)
                 .content(expectedContent)
                 .build()
-        , false);
+        , file);
 
         // when
         List<Post> postList = postRepository.findAll();
@@ -66,6 +73,7 @@ class PostServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "1", roles = "USER")
     public void 글_삭제() throws Exception{
         // given
         Long savedPostId = createPost(createMember(), "테스트 제목", "테스트 내용");

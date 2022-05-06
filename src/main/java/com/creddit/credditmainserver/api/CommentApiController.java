@@ -62,13 +62,15 @@ public class CommentApiController {
     @ApiOperation(value = "댓글 수정")
     @ApiImplicitParam(name = "content", value = "수정할 내용")
     @PostMapping("/comment/{id}")
-    public Long updateComment(@PathVariable Long id, String content){
-        return commentService.updateComment(id, content);
+    public Long updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto){
+        commentService.isSameWriter(id, "수정");
+        return commentService.updateComment(id, commentRequestDto.getContent());
     }
 
     @ApiOperation(value = "댓글 삭제")
     @DeleteMapping("/comment/{id}")
     public void deleteComment(@PathVariable Long id){
+        commentService.isSameWriter(id, "삭제");
         commentService.deleteComment(id);
     }
 
