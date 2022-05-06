@@ -32,16 +32,23 @@ public class PostService {
     }
 
     @Transactional
-    public Long updatePost(Long id, PostRequestDto postRequestDto) {
+    public Long updatePost(Long id, PostRequestDto postRequestDto, boolean isBlankedFile) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다. id = " + id));
 
-        post.updatePost(
-                postRequestDto.getTitle(),
-                postRequestDto.getContent(),
-                postRequestDto.getImgName(),
-                postRequestDto.getImgUrl()
-        );
+        if(isBlankedFile || postRequestDto.getImgName() != null){
+            post.updatePostAndImage(
+                    postRequestDto.getTitle(),
+                    postRequestDto.getContent(),
+                    postRequestDto.getImgName(),
+                    postRequestDto.getImgUrl()
+            );
+        }else{
+            post.updatePost(
+                    postRequestDto.getTitle(),
+                    postRequestDto.getContent()
+            );
+        }
 
         return id;
     }

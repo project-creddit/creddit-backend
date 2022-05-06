@@ -101,12 +101,19 @@ public class PostApiController {
             @RequestPart(value = "requestDto") PostRequestDto postRequestDto
     ){
         String savedImgName = postService.findById(id).getImage().getImgName();
+        boolean isBlankedFile = false;
 
-        if(file != null && !file.isEmpty()){
+        if(file != null){
             checkExistImgAndDelete(savedImgName);
-            imageUpload(file, postRequestDto);
+
+            if(file.isEmpty()){
+                isBlankedFile = true;
+            }else{
+                imageUpload(file, postRequestDto);
+            }
         }
-        return postService.updatePost(id, postRequestDto);
+
+        return postService.updatePost(id, postRequestDto, isBlankedFile);
     }
 
     @ApiOperation(value = "글 삭제")
