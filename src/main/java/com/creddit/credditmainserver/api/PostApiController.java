@@ -28,12 +28,12 @@ public class PostApiController {
             @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like, following")
     })
     @GetMapping("/post")
-    public List<PostResponseDto> getPostPage(
+    public List<PostResponseDto> getPosts(
             @RequestParam Long index,
             @RequestParam int size,
             @RequestParam String sort
     ){
-        return postService.fetchPostPagesBy(index, size, sort);
+        return postService.getPosts(index, size, sort);
     }
 
     @ApiOperation(value = "글 상세화면 조회")
@@ -49,12 +49,12 @@ public class PostApiController {
             @ApiImplicitParam(name = "nickname", value = "유저 닉네임")
     })
     @GetMapping("/post/user/{nickname}")
-    public List<PostResponseDto> getPostPageByUser(
+    public List<PostResponseDto> getPostByUser(
             @RequestParam Long lastPostId,
             @RequestParam int size,
             @PathVariable String nickname
     ){
-        return  postService.getPostPageByUser(lastPostId, size, nickname);
+        return  postService.getPostByUser(lastPostId, size, nickname);
     }
 
     @ApiOperation(value = "글 검색")
@@ -64,12 +64,12 @@ public class PostApiController {
             @ApiImplicitParam(name = "keyword", value = "검색할 키워드")
     })
     @GetMapping("/post/search")
-    public List<PostResponseDto> searchPost(
+    public List<PostResponseDto> searchPosts(
             @RequestParam Long lastPostId,
             @RequestParam int size,
             @RequestParam String keyword
     ){
-        return postService.searchPostByKeyword(lastPostId, size, keyword);
+        return postService.searchPosts(lastPostId, size, keyword);
     }
 
     @ApiOperation(value = "글 작성", notes = "제목, 내용 필수값 / null, '', ' ' 불가능")
@@ -101,12 +101,19 @@ public class PostApiController {
             @RequestPart(value = "requestDto") PostRequestDto postRequestDto
     ){
         String savedImgName = postService.findById(id).getImage().getImgName();
+        boolean isBlankedFile = false;
 
-        if(file != null && !file.isEmpty()){
+        if(file != null){
             checkExistImgAndDelete(savedImgName);
-            imageUpload(file, postRequestDto);
+
+            if(file.isEmpty()){
+                isBlankedFile = true;
+            }else{
+                imageUpload(file, postRequestDto);
+            }
         }
-        return postService.updatePost(id, postRequestDto);
+
+        return postService.updatePost(id, postRequestDto, isBlankedFile);
     }
 
     @ApiOperation(value = "글 삭제")

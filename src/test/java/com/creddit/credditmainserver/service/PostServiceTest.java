@@ -53,7 +53,8 @@ class PostServiceTest {
         Long updatedPostId = postService.updatePost(savedPostId, PostRequestDto.builder()
                 .title(expectedTitle)
                 .content(expectedContent)
-                .build());
+                .build()
+        , false);
 
         // when
         List<Post> postList = postRepository.findAll();

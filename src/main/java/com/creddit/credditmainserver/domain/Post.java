@@ -45,7 +45,12 @@ public class Post extends BaseTimeEntity{
         this.imgUrl = imgUrl;
     }
 
-    public void updatePost(String title, String content, String imgName, String imgUrl){
+    public void updatePost(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
+
+    public void updatePostAndImage(String title, String content, String imgName, String imgUrl){
         this.title = title;
         this.content = content;
         this.imgName = imgName;
