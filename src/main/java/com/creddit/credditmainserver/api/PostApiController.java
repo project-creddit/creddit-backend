@@ -46,8 +46,8 @@ public class PostApiController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "index", value = "최신 정렬 : 마지막 글의 ID, 좋아요 정렬 : 페이지 번호"),
             @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
-            @ApiImplicitParam(name = "nickname", value = "유저 닉네임"),
-            @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like")
+            @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like"),
+            @ApiImplicitParam(name = "nickname", value = "유저 닉네임")
     })
     @GetMapping("/post/user/{nickname}")
     public List<PostResponseDto> getPostByUser(
@@ -61,17 +61,19 @@ public class PostApiController {
 
     @ApiOperation(value = "글 검색")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "lastPostId", value = "마지막 글의 ID"),
+            @ApiImplicitParam(name = "index", value = "최신 or 팔로잉 정렬 : 마지막 글의 ID, 좋아요 정렬 : 페이지 번호"),
             @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
+            @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like, following"),
             @ApiImplicitParam(name = "keyword", value = "검색할 키워드")
     })
     @GetMapping("/post/search")
     public List<PostResponseDto> searchPosts(
-            @RequestParam Long lastPostId,
+            @RequestParam Long index,
             @RequestParam int size,
+            @RequestParam String sort,
             @RequestParam String keyword
     ){
-        return postService.searchPosts(lastPostId, size, keyword);
+        return postService.searchPosts(index, size, sort, keyword);
     }
 
     @ApiOperation(value = "글 작성", notes = "제목, 내용 필수값 / null, '', ' ' 불가능")

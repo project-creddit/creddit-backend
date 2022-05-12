@@ -89,9 +89,22 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    public List<PostResponseDto> searchPosts(Long lastPostId, int size, String keyword){
+    public List<PostResponseDto> searchPosts(Long index, int size, String sort, String keyword){
         PageRequest pageRequest = PageRequest.of(0, size);
-        Page<Post> posts = postRepository.findBySearch(lastPostId, keyword, pageRequest);
+        Page<Post> posts;
+
+        if(sort.equals("like")){
+            int page = Math.toIntExact(index);
+
+            posts = postRepository.findBySearchAndLikes(keyword, PageRequest.of(page, size));
+        }else if(sort.equals("following")){
+            Long currentMemberId = SecurityUtil.getCurrentMemberId();
+            Member member = memberRepository.getById(currentMemberId);
+
+            posts = postRepository.findBySearchAndFollowing(index, member, keyword, pageRequest);
+        }else{
+            posts = postRepository.findBySearch(index, keyword, pageRequest);
+        }
 
         return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
     }
