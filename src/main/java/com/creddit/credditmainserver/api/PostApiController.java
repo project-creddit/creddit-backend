@@ -25,21 +25,27 @@ public class PostApiController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "index", value = "최신 or 팔로잉 정렬 : 마지막 글의 ID, 좋아요 정렬 : 페이지 번호"),
             @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
-            @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like, following")
+            @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like, following"),
+            @ApiImplicitParam(name = "nickname", value = "유저 닉네임")
     })
     @GetMapping("/post")
     public List<PostResponseDto> getPosts(
             @RequestParam Long index,
             @RequestParam int size,
-            @RequestParam String sort
+            @RequestParam String sort,
+            @RequestParam(required = false) String nickname
     ){
-        return postService.getPosts(index, size, sort);
+        return postService.getPosts(index, size, sort, nickname);
     }
 
     @ApiOperation(value = "글 상세화면 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "글 번호"),
+            @ApiImplicitParam(name = "nickname", value = "유저 닉네임")
+    })
     @GetMapping("/post/{id}")
-    public PostResponseDto selectOnePost(@PathVariable Long id){
-        return postService.findById(id);
+    public PostResponseDto getPost(@PathVariable Long id, @RequestParam(required = false) String nickname){
+        return postService.getPost(id, nickname);
     }
 
     @ApiOperation(value = "특정 유저가 작성한 글 조회")
@@ -64,6 +70,7 @@ public class PostApiController {
             @ApiImplicitParam(name = "index", value = "최신 or 팔로잉 정렬 : 마지막 글의 ID, 좋아요 정렬 : 페이지 번호"),
             @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
             @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like, following"),
+            @ApiImplicitParam(name = "nickname", value = "유저 닉네임"),
             @ApiImplicitParam(name = "keyword", value = "검색할 키워드")
     })
     @GetMapping("/post/search")
@@ -71,9 +78,10 @@ public class PostApiController {
             @RequestParam Long index,
             @RequestParam int size,
             @RequestParam String sort,
+            @RequestParam(required = false) String nickname,
             @RequestParam String keyword
     ){
-        return postService.searchPosts(index, size, sort, keyword);
+        return postService.searchPosts(index, size, sort, nickname, keyword);
     }
 
     @ApiOperation(value = "글 작성", notes = "제목, 내용 필수값 / null, '', ' ' 불가능")
@@ -129,7 +137,7 @@ public class PostApiController {
     }
 
     private void checkExistImgAndDelete(Long id) {
-        String savedImgName = postService.findById(id).getImage().getImgName();
+        String savedImgName = postService.getImgName(id);
 
         if (savedImgName != null) {
             awsS3Service.deleteFile(savedImgName);
