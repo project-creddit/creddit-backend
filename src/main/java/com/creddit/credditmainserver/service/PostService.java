@@ -96,12 +96,20 @@ public class PostService {
         return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
     }
 
-    public List<PostResponseDto> getPostByUser(Long lastPostId, int size, String nickname) {
+    public List<PostResponseDto> getPostByUser(Long index, int size, String sort, String nickname) {
         Member member = memberRepository.findByNickname(nickname)
                 .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다. nickname = " + nickname));
 
         PageRequest pageRequest = PageRequest.of(0, size);
-        Page<Post> posts = postRepository.findByIdLessThanAndMemberIdOrderByIdDesc(lastPostId, member.getId(), pageRequest);
+        Page<Post> posts;
+
+        if(sort.equals("like")){
+            int page = Math.toIntExact(index);
+
+            posts = postRepository.findByMemberIdAndLikes(member, PageRequest.of(page, size));
+        }else{
+            posts = postRepository.findByIdLessThanAndMemberIdOrderByIdDesc(index, member.getId(), pageRequest);
+        }
 
         return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
     }

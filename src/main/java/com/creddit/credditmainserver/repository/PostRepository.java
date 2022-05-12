@@ -15,6 +15,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByIdLessThanAndMemberIdOrderByIdDesc(Long id, Long memberId, Pageable pageable);
 
     @Query("select p from Post p left join p.likes l " +
+            "where p.member = :member " +
+            "group by p.id " +
+            "order by count(l.post) desc, p.id desc")
+    Page<Post> findByMemberIdAndLikes(@Param("member") Member member, Pageable pageable);
+
+    @Query("select p from Post p left join p.likes l " +
             "group by p.id " +
             "order by count(l.post) desc, p.id desc")
     Page<Post> findByLikes(Pageable pageable);

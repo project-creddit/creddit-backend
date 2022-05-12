@@ -44,17 +44,19 @@ public class PostApiController {
 
     @ApiOperation(value = "특정 유저가 작성한 글 조회")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "lastPostId", value = "마지막 글의 ID"),
+            @ApiImplicitParam(name = "index", value = "최신 정렬 : 마지막 글의 ID, 좋아요 정렬 : 페이지 번호"),
             @ApiImplicitParam(name = "size", value = "불러올 글의 개수"),
-            @ApiImplicitParam(name = "nickname", value = "유저 닉네임")
+            @ApiImplicitParam(name = "nickname", value = "유저 닉네임"),
+            @ApiImplicitParam(name = "sort", value = "정렬 기준 ex) new, like")
     })
     @GetMapping("/post/user/{nickname}")
     public List<PostResponseDto> getPostByUser(
-            @RequestParam Long lastPostId,
+            @RequestParam Long index,
             @RequestParam int size,
+            @RequestParam String sort,
             @PathVariable String nickname
     ){
-        return  postService.getPostByUser(lastPostId, size, nickname);
+        return  postService.getPostByUser(index, size, sort, nickname);
     }
 
     @ApiOperation(value = "글 검색")
