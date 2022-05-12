@@ -34,8 +34,7 @@ public class PostService {
 
     @Transactional
     public Long updatePost(Long id, PostRequestDto postRequestDto, MultipartFile file) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다. id = " + id));
+        Post post = getPostById(id);
 
         if((file != null && file.isEmpty()) || postRequestDto.getImgName() != null){
             post.updatePostAndImage(
@@ -56,65 +55,85 @@ public class PostService {
 
     @Transactional
     public void deletePost(Long id){
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다. id = " + id));
-
+        Post post = getPostById(id);
         postRepository.delete(post);
     }
 
-    public List<PostResponseDto> getPosts(Long index, int size, String sort) {
+    public List<PostResponseDto> getPosts(Long index, int size, String sort, String nickname) {
+        Member member = nickname != null ? getMemberByNickname(nickname) : null;
         PageRequest pageRequest = PageRequest.of(0, size);
         Page<Post> posts;
 
         if(sort.equals("like")){
-            int page = Math.toIntExact(index);
-
-            posts = postRepository.findByLikes(PageRequest.of(page, size));
+            posts = postRepository.findByLikes(PageRequest.of(Math.toIntExact(index), size));
         }else if(sort.equals("following")){
-            Long currentMemberId = SecurityUtil.getCurrentMemberId();
-            Member member = memberRepository.getById(currentMemberId);
-
             posts = postRepository.findByFollowing(index, member, pageRequest);
         }else{
             posts = postRepository.findByIdLessThanOrderByIdDesc(index, pageRequest);
         }
 
-        return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
+        return posts.stream().map(post -> new PostResponseDto(post, member)).collect(Collectors.toList());
     }
 
-    public PostResponseDto findById(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다. id = " + id));
+    public PostResponseDto getPost(Long id, String nickname) {
+        Member member = nickname != null ? getMemberByNickname(nickname) : null;
+        Post post = getPostById(id);
 
-        return new PostResponseDto(post);
+        return new PostResponseDto(post, member);
     }
 
-    public List<PostResponseDto> searchPosts(Long lastPostId, int size, String keyword){
+    public List<PostResponseDto> searchPosts(Long index, int size, String sort, String nickname, String keyword){
+        Member member = nickname != null ? getMemberByNickname(nickname) : null;
         PageRequest pageRequest = PageRequest.of(0, size);
-        Page<Post> posts = postRepository.findBySearch(lastPostId, keyword, pageRequest);
+        Page<Post> posts;
 
-        return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
+        if(sort.equals("like")){
+            posts = postRepository.findBySearchAndLikes(keyword, PageRequest.of(Math.toIntExact(index), size));
+        }else if(sort.equals("following")){
+            posts = postRepository.findBySearchAndFollowing(index, member, keyword, pageRequest);
+        }else{
+            posts = postRepository.findBySearch(index, keyword, pageRequest);
+        }
+
+        return posts.stream().map(post -> new PostResponseDto(post, member)).collect(Collectors.toList());
     }
 
-    public List<PostResponseDto> getPostByUser(Long lastPostId, int size, String nickname) {
-        Member member = memberRepository.findByNickname(nickname)
+    public List<PostResponseDto> getPostByUser(Long index, int size, String sort, String nickname, String otherNickname) {
+        Member member = getMemberByNickname(nickname);
+        Member otherMember = getMemberByNickname(otherNickname);
+        PageRequest pageRequest = PageRequest.of(0, size);
+        Page<Post> posts;
+
+        if(sort.equals("like")){
+            posts = postRepository.findByMemberIdAndLikes(otherMember, PageRequest.of(Math.toIntExact(index), size));
+        }else{
+            posts = postRepository.findByIdLessThanAndMemberIdOrderByIdDesc(index, otherMember.getId(), pageRequest);
+        }
+
+        return posts.stream().map(post -> new PostResponseDto(post, member)).collect(Collectors.toList());
+    }
+
+    private Member getMemberByNickname(String nickname) {
+         return memberRepository.findByNickname(nickname)
                 .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다. nickname = " + nickname));
+    }
 
-        PageRequest pageRequest = PageRequest.of(0, size);
-        Page<Post> posts = postRepository.findByIdLessThanAndMemberIdOrderByIdDesc(lastPostId, member.getId(), pageRequest);
-
-        return posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
+    private Post getPostById(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다. id = " + id));
     }
 
     public void isSameWriter(Long id, String keyword){
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("글이 존재하지 않습니다. id = " + id));
-
-        Long postMemberId = post.getMember().getId();
+        Long postMemberId = getPostById(id).getId();
         long currentMemberId = SecurityUtil.getCurrentMemberId();
 
         if(postMemberId != currentMemberId){
             throw new RuntimeException("작성자만 " + keyword + "할 수 있습니다.");
         }
+    }
+
+    public String getImgName(Long id){
+        return postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다. id = " + id)).getImgName();
     }
 }

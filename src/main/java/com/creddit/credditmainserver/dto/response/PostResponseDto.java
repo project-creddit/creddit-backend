@@ -1,13 +1,11 @@
 package com.creddit.credditmainserver.dto.response;
 
 import com.creddit.credditmainserver.domain.Image;
+import com.creddit.credditmainserver.domain.Member;
 import com.creddit.credditmainserver.domain.Post;
-import com.creddit.credditmainserver.login.security.SecurityUtil;
 import lombok.Getter;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 @Getter
 public class PostResponseDto {
@@ -24,7 +22,7 @@ public class PostResponseDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public PostResponseDto(Post post) {
+    public PostResponseDto(Post post, Member currentMember) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
@@ -46,16 +44,10 @@ public class PostResponseDto {
                 .imgUrl(post.getMember().getImgUrl())
                 .build();
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if(principal.equals("anonymousUser")){
-            this.isLiked = false;
-        }else{
-            this.isLiked = post.getLikes().stream().anyMatch(
-                    like -> like.getMember()
-                            .getId()
-                            .equals(SecurityUtil.getCurrentMemberId())
-            ) ? true : false;
-        }
+        this.isLiked = currentMember != null && post.getLikes().stream().anyMatch(
+                like -> like.getMember()
+                        .getId()
+                        .equals(currentMember.getId())
+        );
     }
 }
