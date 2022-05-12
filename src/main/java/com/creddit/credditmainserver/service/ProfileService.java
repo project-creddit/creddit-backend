@@ -31,6 +31,11 @@ public class ProfileService {
         return new ProfileResponseDto(member);
     }
 
+    public ProfileResponseDto getProfileByNickname(String nickname){
+        Member member = memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("프로필 로드 오류 nickname =" + nickname));
+        return new ProfileResponseDto(member);
+    }
+
     public Member findById(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("프로필 로드 오류 memberId =" + id));
         return member;

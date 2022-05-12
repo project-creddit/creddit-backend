@@ -26,6 +26,12 @@ public class ProfileApiController {
     private final ProfileService profileService;
     private final AwsS3Service awsS3Service;
 
+    @ApiOperation(value = "닉네임을 통한 프로필 출력")
+    @GetMapping("/profile/show/{nickname}")
+    public ProfileResponseDto getProfile(@PathVariable String nickname){
+        return profileService.getProfileByNickname(nickname);
+    }
+
     @ApiOperation(value = "프로필 출력")
     @GetMapping("/profile/show")
     public ProfileResponseDto getProfile(Principal principal){
