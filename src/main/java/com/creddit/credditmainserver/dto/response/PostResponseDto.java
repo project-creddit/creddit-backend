@@ -22,7 +22,7 @@ public class PostResponseDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public PostResponseDto(Post post, Member member) {
+    public PostResponseDto(Post post, Member currentMember) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
@@ -44,10 +44,10 @@ public class PostResponseDto {
                 .imgUrl(post.getMember().getImgUrl())
                 .build();
 
-        this.isLiked = member != null && post.getLikes().stream().anyMatch(
+        this.isLiked = currentMember != null && post.getLikes().stream().anyMatch(
                 like -> like.getMember()
                         .getId()
-                        .equals(member.getId())
+                        .equals(currentMember.getId())
         );
     }
 }

@@ -98,15 +98,16 @@ public class PostService {
         return posts.stream().map(post -> new PostResponseDto(post, member)).collect(Collectors.toList());
     }
 
-    public List<PostResponseDto> getPostByUser(Long index, int size, String sort, String nickname) {
+    public List<PostResponseDto> getPostByUser(Long index, int size, String sort, String nickname, String otherNickname) {
         Member member = getMemberByNickname(nickname);
+        Member otherMember = getMemberByNickname(otherNickname);
         PageRequest pageRequest = PageRequest.of(0, size);
         Page<Post> posts;
 
         if(sort.equals("like")){
-            posts = postRepository.findByMemberIdAndLikes(member, PageRequest.of(Math.toIntExact(index), size));
+            posts = postRepository.findByMemberIdAndLikes(otherMember, PageRequest.of(Math.toIntExact(index), size));
         }else{
-            posts = postRepository.findByIdLessThanAndMemberIdOrderByIdDesc(index, member.getId(), pageRequest);
+            posts = postRepository.findByIdLessThanAndMemberIdOrderByIdDesc(index, otherMember.getId(), pageRequest);
         }
 
         return posts.stream().map(post -> new PostResponseDto(post, member)).collect(Collectors.toList());
