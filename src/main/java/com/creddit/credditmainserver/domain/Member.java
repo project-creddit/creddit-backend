@@ -38,6 +38,9 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @Enumerated(EnumType.STRING)
+    private ProviderType providerType;
+
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
     private List<Follower> followings = new ArrayList<>();
@@ -51,13 +54,14 @@ public class Member extends BaseTimeEntity{
         this.imgName = imgName;
         this.introduction = (introduction == null) ? "" : introduction;
     }
-    public static Member toEntity(String email, String password, String nickname, Authority authority, boolean activated) {
+    public static Member toEntity(String email, String password, String nickname, Authority authority, boolean activated,ProviderType providerType) {
         Member member= new Member();
         member.setEmail(email);
         member.setPassword(password);
         member.setNickname(nickname);
         member.setAuthority(authority);
         member.setActivated(activated);
+        member.setProviderType(providerType);
         return member;
     }
 }
