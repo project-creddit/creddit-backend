@@ -1,6 +1,7 @@
 package com.creddit.credditmainserver.service;
 
 import com.creddit.credditmainserver.domain.Member;
+import com.creddit.credditmainserver.domain.ProviderType;
 import com.creddit.credditmainserver.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +27,11 @@ public class EmailSendService {
 
 
     @Transactional
-    public Long findAndChangPassword(String email) throws MessagingException {
+    public Long findAndChangPassword(String email) throws Exception {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 email = "+ email));
+        if(member.getProviderType()!= ProviderType.LOCAL){
+            throw new Exception("소셜 로그인 회원입니다");
+        }
         String str =getTempPassword();
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
