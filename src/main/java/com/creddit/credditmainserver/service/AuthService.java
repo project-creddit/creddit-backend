@@ -75,6 +75,18 @@ public class AuthService {
         Member member = memberRepository.findByEmail(socialLoginRequestDto.getEmail())
                 .orElse(socialSignup(socialLoginRequestDto));
 
+        ProviderType providerType = ProviderType.LOCAL;
+        if(socialLoginRequestDto.getType().equals("kakao")){
+            providerType = ProviderType.KAKAO;
+        }
+        else if(socialLoginRequestDto.getType().equals("naver")){
+            providerType = ProviderType.NAVER;
+        }
+
+        if(member.getProviderType()==ProviderType.LOCAL || member.getProviderType()!=providerType){
+            throw new Exception("이미 회원가입된 회원입니다.");
+        }
+
         MemberRequestDto memberRequestDto = new MemberRequestDto(member.getEmail(),member.getNickname(),socialLoginRequestDto.getEmail()+key);
 
         return login(memberRequestDto);
