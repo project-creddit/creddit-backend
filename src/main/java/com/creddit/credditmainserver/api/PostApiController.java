@@ -61,7 +61,7 @@ public class PostApiController {
             @RequestParam Long index,
             @RequestParam int size,
             @RequestParam String sort,
-            @RequestParam String nickname,
+            @RequestParam(required = false) String nickname,
             @PathVariable String otherNickname
     ){
         return  postService.getPostByUser(index, size, sort, nickname, otherNickname);

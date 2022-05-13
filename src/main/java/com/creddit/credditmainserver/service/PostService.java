@@ -99,7 +99,7 @@ public class PostService {
     }
 
     public List<PostResponseDto> getPostByUser(Long index, int size, String sort, String nickname, String otherNickname) {
-        Member member = getMemberByNickname(nickname);
+        Member member = nickname != null ? getMemberByNickname(nickname) : null;
         Member otherMember = getMemberByNickname(otherNickname);
         PageRequest pageRequest = PageRequest.of(0, size);
         Page<Post> posts;
