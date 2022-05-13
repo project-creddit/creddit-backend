@@ -124,7 +124,7 @@ public class PostService {
     }
 
     public void isSameWriter(Long id, String keyword){
-        Long postMemberId = getPostById(id).getId();
+        Long postMemberId = getPostById(id).getMember().getId();
         long currentMemberId = SecurityUtil.getCurrentMemberId();
 
         if(postMemberId != currentMemberId){
