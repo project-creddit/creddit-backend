@@ -25,4 +25,9 @@ public class MemberRequestDto {
     public UsernamePasswordAuthenticationToken toAuthentication(){
         return new UsernamePasswordAuthenticationToken(email,password);
     }
+    public MemberRequestDto(String email,String nickname, String password){
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+    }
 }

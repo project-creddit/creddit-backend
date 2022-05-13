@@ -1,6 +1,8 @@
 package com.creddit.credditmainserver.controller;
 
+import com.creddit.credditmainserver.domain.Member;
 import com.creddit.credditmainserver.dto.request.MemberRequestDto;
+import com.creddit.credditmainserver.dto.request.SocialLoginRequestDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
 import com.creddit.credditmainserver.login.jwt.TokenDto;
 import com.creddit.credditmainserver.login.jwt.TokenRequestDto;
@@ -26,6 +28,18 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @ApiOperation(value="소셜로그인")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "email", value = "회원의 email"),
+            @ApiImplicitParam(name = "nickname", value = "회원의 nickname"),
+            @ApiImplicitParam(name = "type", value = "로그인 타입(kakao 혹은 naver)")
+    })
+    @PostMapping("/login/social")
+    public TokenDto socialLogin(@RequestBody SocialLoginRequestDto socialLoginRequestDto) throws Exception {
+        return authService.socialLogin(socialLoginRequestDto);
+    }
+
+
     @ApiOperation(value="회원가입")
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody MemberRequestDto memberRequestDto,BindingResult bindingResult){
@@ -38,7 +52,7 @@ public class AuthController {
 
     @ApiOperation(value="로그인")
     @PostMapping("login")
-    public TokenDto login(@RequestBody MemberRequestDto memberRequestDto){
+    public TokenDto login(@RequestBody MemberRequestDto memberRequestDto) {
         return authService.login(memberRequestDto);
     }
 

@@ -71,13 +71,13 @@ public class MemberApiController {
 
     @Operation(summary = "임시비밀번호 발송", description = " return: 멤버아이디")
     @PostMapping("/sendEmail/password")
-    public Long sendEmail(@RequestBody String email) throws MessagingException {
+    public Long sendEmail(@RequestBody String email) throws Exception {
         return emailSendService.findAndChangPassword(email);
     }
 
     @Operation(summary = "비밀번호 변경", description = " return: 멤버아이디")
     @PostMapping("/changePassword")
-    public Long changePassword(@RequestBody @Valid PasswordRequestDto passwordRequestDto, Principal principal) {
+    public Long changePassword(@RequestBody @Valid PasswordRequestDto passwordRequestDto, Principal principal) throws Exception {
         return memberService.changePassword(passwordRequestDto, Long.parseLong(principal.getName()));
     }
 

@@ -2,6 +2,7 @@ package com.creddit.credditmainserver.service;
 
 import com.creddit.credditmainserver.domain.Follower;
 import com.creddit.credditmainserver.domain.Member;
+import com.creddit.credditmainserver.domain.ProviderType;
 import com.creddit.credditmainserver.dto.request.PasswordRequestDto;
 import com.creddit.credditmainserver.dto.response.FollowListResponseDto;
 import com.creddit.credditmainserver.dto.response.MemberResponseDto;
@@ -80,8 +81,13 @@ public class MemberService {
        return new MemberResponseDto(member);
     }
     @Transactional
-    public Long changePassword(PasswordRequestDto passwordRequestDto, Long id){
+    public Long changePassword(PasswordRequestDto passwordRequestDto, Long id) throws Exception {
         Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 memberId =" + id));
+
+        if(member.getProviderType()!= ProviderType.LOCAL){
+            throw new Exception("소셜로그인 회원입니다.");
+        }
+
         member.setPassword(passwordEncoder.encode(passwordRequestDto.getPassword()));
         return memberRepository.save(member).getId();
     }
