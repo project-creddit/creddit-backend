@@ -1,11 +1,13 @@
 package com.creddit.credditmainserver.dto.request;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.validation.constraints.*;
 
+@NoArgsConstructor
 @Getter
 @Setter
 public class MemberRequestDto {
