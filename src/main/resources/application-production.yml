@@ -1,8 +1,8 @@
 spring:
+  profiles:
+    activate: local
   config:
     import: application-aws.yml
-    activate:
-      on-profile: local
 
   datasource:
     url: jdbc:h2:tcp://localhost/~/creddit-main-server
