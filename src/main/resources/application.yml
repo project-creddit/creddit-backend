@@ -1,9 +1,23 @@
 spring:
+  config:
+    import: application-aws.yml
   datasource:
     url: jdbc:h2:tcp://localhost/~/creddit-main-server
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: 이메일주소@naver.com
+    password:  비밀번호
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable : true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   jpa:
     hibernate:
@@ -11,8 +25,20 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        show-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    log-request-details: true
 
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+    com.amazonaws.util.EC2MetadataUtils: error
+
+jwt:
+  secret: Y3JlZGl0LXRlYW0tc3ByaW5nLWJvb3QtanBhLW15c3FsLXByb2plY3Qtc29jaWFsLW5ldHdvcmstc2VydmljZQo=
+
+
+
