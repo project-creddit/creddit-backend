@@ -20,6 +20,12 @@ public class ProfileService {
     public ProfileResponseDto saveProfile(Long id, ProfileRequestDto profileRequestDto){
 
         Member member = findById(id);
+
+        if(profileRequestDto.getImage().getImgName().equals("empty")&& !member.getImgName().equals("") && !member.getImgName().equals("empty")){
+            profileRequestDto.getImage().setImgName(member.getImgName());
+            profileRequestDto.getImage().setImgUrl(member.getImgUrl());
+        }
+
         member.setProfile(profileRequestDto.getImage().getImgUrl(), profileRequestDto.getImage().getImgName(),profileRequestDto.getIntroduction());
         memberRepository.save(member);
 

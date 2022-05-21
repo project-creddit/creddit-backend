@@ -52,20 +52,21 @@ public class CommentService {
         return comments.stream().map(DetailCommentResponseDto::new).collect(Collectors.toList());
     }
 
-    public Long createComment(CommentRequestDto commentRequestDto){
+    public CommentResponseDto createComment(CommentRequestDto commentRequestDto){
         Member member = memberRepository.getById(SecurityUtil.getCurrentMemberId());
         Post post = postRepository.getById(commentRequestDto.getPostId());
+        Comment comment = commentRepository.save(commentRequestDto.toEntity(member, post));
 
-        return commentRepository.save(commentRequestDto.toEntity(member, post)).getId();
+        return new CommentResponseDto(comment);
     }
 
-    public Long updateComment(Long id, String content) {
+    public CommentResponseDto updateComment(Long id, String content) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("댓글이 없습니다. id = " + id));
 
         comment.updateComment(content);
 
-        return id;
+        return new CommentResponseDto(comment);
     }
 
     public void deleteComment(Long id){

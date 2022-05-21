@@ -55,14 +55,14 @@ public class CommentApiController {
     @ApiOperation(value = "댓글 작성", notes = "글 번호, 내용 필수값 / 내용 null, '', ' ' 모두 불가능")
     @ApiImplicitParam(name = "requestDto", value = "글 ID, 부모 댓글 ID, 내용")
     @PostMapping("/comment")
-    public Long createComment(@RequestBody CommentRequestDto commentRequestDto){
+    public CommentResponseDto createComment(@RequestBody CommentRequestDto commentRequestDto){
         return commentService.createComment(commentRequestDto);
     }
 
     @ApiOperation(value = "댓글 수정")
     @ApiImplicitParam(name = "content", value = "수정할 내용")
     @PostMapping("/comment/{id}")
-    public Long updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto){
+    public CommentResponseDto updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto){
         commentService.isSameWriter(id, "수정");
         return commentService.updateComment(id, commentRequestDto.getContent());
     }

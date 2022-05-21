@@ -50,12 +50,12 @@ public class ProfileApiController {
 
         if(!file.isEmpty()){
             image = awsS3Service.upload(file, "post");
+
         }
         else{
             image.setImgName("empty");
             image.setImgUrl("");
         }
-
         profileRequestDto.setImage(image);
         return profileService.saveProfile(id, profileRequestDto);
     }
