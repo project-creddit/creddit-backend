@@ -30,13 +30,13 @@
 <br>
 
 * Front-end
- * Language: TypeScript
- * Framework: React, Next.js
- * State management: Redux, SWR
- * Package manager: Yarn Berry
- * Test: Testing Library
- * Style: Sass
- * Web Socket: SockJS-client , Stomjs
+  * Language: TypeScript
+  * Framework: React, Next.js
+  * State management: Redux, SWR
+  * Package manager: Yarn Berry
+  * Test: Testing Library
+  * Style: Sass
+  * Web Socket: SockJS-client , Stomjs
 
 <br><br>
 
