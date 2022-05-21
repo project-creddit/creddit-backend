@@ -21,24 +21,42 @@
   * Framework: SpringBoot
   * ORM: JPA
   * Build Tool: gradle
+  * DBMS: MySQL, NoSQL
 <br>
 
 * Server  
   * AWS EC2
+  * AWS S3
+<br>
+
+* Front-end
+ * Language: TypeScript
+ * Framework: React, Next.js
+ * State management: Redux, SWR
+ * Package manager: Yarn Berry
+ * Test: Testing Library
+ * Style: Sass
+ * Web Socket: SockJS-client , Stomjs
 
 <br><br>
 
-## ERD
-<img width="600" alt="ERD" src="https://user-images.githubusercontent.com/62630941/169529879-fbf9b9e7-f4b9-42bf-98ce-837a8ce31345.png">
+## Main Server ERD
+<img width="600" alt="ERD" src="https://user-images.githubusercontent.com/56907015/169647831-ff423c03-d4aa-4c23-b283-ad4700570fad.png">
+<br><br>
+
+## Chat Server ERD
+<img width="600" alt="ERD" src="https://user-images.githubusercontent.com/56907015/169647868-cb57ca31-282f-4471-bb54-873f4c9cfd15.png">
 <br><br>
 
 
 ## Web App Architecture 
 <img width="700" alt="architecture" src="https://user-images.githubusercontent.com/56907015/169509002-246e0051-7ba3-4439-9b0b-74ab7e4bdcf1.png">
+<br><br>
 
 ## Members
 * Front-end : 이우철(팀장) | 김경민
 * Back-end :  김윤희 | 김영은 | 인세훈
+<br><br>
 
 ## Development Period
 2022.03.20 ~ 2022.05.20
