@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("https://www.creddit.shop");
+        configuration.addAllowedOrigin("https://ddcoh0c5fwvb1.cloudfront.net");
         configuration.addAllowedOrigin("https://chat.creddit.shop");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
