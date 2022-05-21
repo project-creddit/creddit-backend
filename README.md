@@ -4,7 +4,10 @@
 
 ## Functions
 * 로그인 & 회원가입  - Security + JWT를 통한 로그인, 네이버 로그인 , 카카오 로그인
-<img src="https://user-images.githubusercontent.com/56907015/169650339-9c744bef-4138-453a-b851-bfc67e69d5b9.MP4">
+<img width="400" src="https://user-images.githubusercontent.com/56907015/169650549-b16f3a5d-303d-4e1f-ad67-bef292acafac.mp4">
+<br>
+
+
 * 비밀번호 찾기 - 해당 이메일에 새로 발급된 비밀번호를 전송
 * 프로필 생성 & 수정 - 프로필 사진, 소개 글을 생성, 수정, 삭제
 * 팔로우 기능    
