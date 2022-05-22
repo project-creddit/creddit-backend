@@ -63,8 +63,8 @@
 <br><br>
 
 ## Members
-* Front-end : 이우철(팀장) | 김경민
-* Back-end :  김윤희 | 김영은 | 인세훈
+* Front-end : [이우철](https://github.com/woochul2) | [김경민](https://github.com/Kimkyungmin123)
+* Back-end :  [김윤희](https://github.com/kyh1685) | [김영은](https://github.com/YoungEunKim99) | [인세훈](https://github.com/oereo)
 <br><br>
 
 ## Development Period
