@@ -61,10 +61,12 @@
 
 * 답글 생성 & 수정 & 삭제 
 
+<img width="700" src="https://user-images.githubusercontent.com/49304239/170074657-2a51e744-783e-4a62-a311-d36d53a75a68.gif">
+<br>
+
 * 글, 댓글 좋아요 기능 
 
 <img width="700" src="https://user-images.githubusercontent.com/49304239/170073043-89d9fa49-dc4b-4616-8886-f608df229dea.gif">
-<br>
 
 <br><br>
 
