@@ -3,7 +3,7 @@
 <br><br>
 
 ## Functions
-*사이트 배경색 2가지 버전
+* 사이트 배경색 2가지 버전
 <img width="700" src="https://user-images.githubusercontent.com/56907015/170044127-66421d33-f287-4da5-9df1-c65bc06f5a78.gif">
 <br>
 
@@ -44,7 +44,7 @@
 <img width="700" src="https://user-images.githubusercontent.com/56907015/170036600-59421720-be71-43a3-b4f4-4c874d630e88.gif">
 <br>
 
-*글 검색
+* 글 검색
 <img width="700" src="https://user-images.githubusercontent.com/56907015/170044168-928f18a9-ae8f-490f-b736-586e682f84c1.gif">
 <br>
 
