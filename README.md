@@ -26,11 +26,20 @@
 
 * 글 생성 & 수정 & 삭제 - 사진을 포함하거나 포함하지 않고 글을 생성, 수정, 삭제
 * 글 목록 무한 스크롤 - 무한 스크롤을 구현하여 글이 스크롤에 따라 새로 출력
-
+<img width="700" src="https://user-images.githubusercontent.com/56907015/170036600-59421720-be71-43a3-b4f4-4c874d630e88.gif">
+<br>
 
 
 * 글, 댓글 최신순  & 인기순 정렬 - 인기순일 시 좋아요 순으로 출력
+<img width="700" src="https://user-images.githubusercontent.com/56907015/170036600-59421720-be71-43a3-b4f4-4c874d630e88.gif">
+<br>
+
+
 * 팔로우한 사람의 글 모아보기
+<img width="700" src="https://user-images.githubusercontent.com/56907015/170034947-670f0165-8db2-4877-ab24-00e8b4fabecd.gif">
+<br>
+
+
 * 댓글 생성 & 수정 & 삭제 
 * 글, 댓글 좋아요 기능 
 <br><br>
