@@ -34,6 +34,8 @@
 
 * 글 생성 & 수정 & 삭제 - 사진을 포함하거나 포함하지 않고 글을 생성, 수정, 삭제
 
+<img width="700" src="https://user-images.githubusercontent.com/49304239/170073123-323511d1-f3a6-4815-9186-a038729ead7d.gif">
+<br>
 
 * 글 목록 무한 스크롤 - 무한 스크롤을 구현하여 글이 스크롤에 따라 새로 출력
 <img width="700" src="https://user-images.githubusercontent.com/56907015/170036600-59421720-be71-43a3-b4f4-4c874d630e88.gif">
@@ -52,9 +54,18 @@
 <img width="700" src="https://user-images.githubusercontent.com/56907015/170034947-670f0165-8db2-4877-ab24-00e8b4fabecd.gif">
 <br>
 
-
 * 댓글 생성 & 수정 & 삭제 
+
+<img width="700" src="https://user-images.githubusercontent.com/49304239/170072968-fc272718-617a-4be4-b685-663379fea520.gif">
+<br>
+
+* 답글 생성 & 수정 & 삭제 
+
 * 글, 댓글 좋아요 기능 
+
+<img width="700" src="https://user-images.githubusercontent.com/49304239/170073043-89d9fa49-dc4b-4616-8886-f608df229dea.gif">
+<br>
+
 <br><br>
 
 ## SKills
