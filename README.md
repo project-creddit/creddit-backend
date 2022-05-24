@@ -9,7 +9,7 @@
 
 
 * 비밀번호 찾기 - 해당 이메일에 새로 발급된 비밀번호를 전송
-<img width="700" src="https://user-images.githubusercontent.com/56907015/169650743-c41d7eb9-dc23-48a1-b45b-ad273c33fe01.gif">
+<img width="700" src="https://user-images.githubusercontent.com/56907015/170042503-c47afc66-be00-44a3-a3a8-402ee3c1c930.gif">
 <br>
 
 
