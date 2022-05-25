@@ -1,5 +1,6 @@
 package com.creddit.credditmainserver.service;
 
+import com.creddit.credditmainserver.domain.Image;
 import com.creddit.credditmainserver.domain.Member;
 import com.creddit.credditmainserver.domain.Post;
 import com.creddit.credditmainserver.dto.request.ProfileRequestDto;
@@ -9,6 +10,7 @@ import com.creddit.credditmainserver.dto.response.ProfileResponseDto;
 import com.creddit.credditmainserver.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -16,15 +18,24 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProfileService {
     private final MemberRepository memberRepository;
-
-    public ProfileResponseDto saveProfile(Long id, ProfileRequestDto profileRequestDto){
+    private final AwsS3Service awsS3Service;
+    public ProfileResponseDto saveProfile(Long id, ProfileRequestDto profileRequestDto, MultipartFile file) {
 
         Member member = findById(id);
+        Image image = new Image();
 
-        if(profileRequestDto.getImage().getImgName().equals("empty")&& !member.getImgName().equals("") && !member.getImgName().equals("empty")){
-            profileRequestDto.getImage().setImgName(member.getImgName());
-            profileRequestDto.getImage().setImgUrl(member.getImgUrl());
+        if(file == null){
+            image.setImgName("empty");
+            image.setImgUrl("");
         }
+        else if(!file.isEmpty()){
+            image = awsS3Service.upload(file, "post");
+        }
+        else{
+           image.setImgName(member.getImgName());
+           image.setImgUrl(member.getImgUrl());
+        }
+        profileRequestDto.setImage(image);
 
         member.setProfile(profileRequestDto.getImage().getImgUrl(), profileRequestDto.getImage().getImgName(),profileRequestDto.getIntroduction());
         memberRepository.save(member);
