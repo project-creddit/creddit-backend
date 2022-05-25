@@ -20,6 +20,8 @@
 
 
 * 프로필 생성 & 수정 - 프로필 사진, 소개 글을 생성, 수정, 삭제
+<img width="700" src="https://user-images.githubusercontent.com/49304239/170191746-0d3b9269-4720-4a7c-b032-667a262df21b.gif">
+<br>
 
 
 * 팔로우 기능
