@@ -39,6 +39,20 @@ public class ProfileApiController {
         return profileService.getProfile(Long.parseLong(id));
     }
 
+
+
+    @PostMapping(value = "/profile/test")
+    public void test(@RequestPart(value = "image", required = false) MultipartFile file){
+        if(file == null){
+            System.out.println("file is null");
+        }
+        else if(file.isEmpty()){
+            System.out.println("file is Empty");
+        }
+
+
+    }
+
     @ApiOperation(value = "프로필 생성/수정")
     @PostMapping(value = "/profile/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ProfileResponseDto saveProfile(Principal principal,
@@ -46,18 +60,8 @@ public class ProfileApiController {
                                           @Valid @RequestPart ProfileRequestDto profileRequestDto) throws IOException {
         Long id = Long.parseLong(principal.getName());
         checkExistImgAndDelete(profileService.findById(id).getImgName());
-        Image image = new Image();
 
-        if(!file.isEmpty()){
-            image = awsS3Service.upload(file, "post");
-
-        }
-        else{
-            image.setImgName("empty");
-            image.setImgUrl("");
-        }
-        profileRequestDto.setImage(image);
-        return profileService.saveProfile(id, profileRequestDto);
+        return profileService.saveProfile(id, profileRequestDto, file);
     }
 
     private void checkExistImgAndDelete(String savedImgName) {
