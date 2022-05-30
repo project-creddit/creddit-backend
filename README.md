@@ -29,7 +29,7 @@
 <br>
 
 
-* 팔로우한 사람과 채팅 - 단체 채팅이 가능
+* 가입된 유저를 검색해서 대화 상대로 추가한 후 채팅
 <img width="700" src="https://user-images.githubusercontent.com/56907015/170034973-b338fea5-b5d3-47e3-bd42-5fd89c6c4cd0.gif">
 <br>
 
