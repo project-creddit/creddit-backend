@@ -15,6 +15,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
+@Table(indexes = @Index(name = "member_ix_nickname_ascend", columnList = "nickname ASC"))
 public class Member extends BaseTimeEntity{
 
     @Id @GeneratedValue
