@@ -42,9 +42,12 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL)
+    private List<Follower> followings = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
-    private List<Follower> followings = new ArrayList<>();
+    private List<Follower> followers = new ArrayList<>();
 
     public FollowListResponseDto memberToFollowList(){
         return new FollowListResponseDto(email,nickname,imgUrl, imgName);

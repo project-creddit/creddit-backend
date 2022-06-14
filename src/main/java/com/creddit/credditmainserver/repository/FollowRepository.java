@@ -12,6 +12,11 @@ import java.util.Optional;
 @Repository
 public interface FollowRepository extends JpaRepository<Follower, Long> {
     List<Follower> findAllByFollower(Member follower);
-    Optional<Follower> findByFollowingAndAndFollower(Long following, Member follower);
+
+    @Query("select f from Follower f join fetch f.following where f.follower = :follower")
+    List<Follower> findAllFollowings(@Param("follower") Member follower);
+
+    Optional<Follower> findByFollowingAndAndFollower(Member following, Member follower);
+
     void deleteAllById(Long id);
 }

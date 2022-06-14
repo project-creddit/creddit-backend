@@ -31,12 +31,11 @@ public class MemberService {
     @Transactional
     public List<FollowListResponseDto> followList(Long id){
         Member member = memberRepository.findById(id).orElseThrow();
-        List<Follower> followers = followRepository.findAllByFollower(member);
-        List<Member> list = new ArrayList<>();
-        followers.forEach(o->
-                list.add(memberRepository.findById(o.getFollowing()).orElseThrow()));
+        List<Follower> followers = followRepository. findAllFollowings(member);
 
-        return list.stream().map(Member::memberToFollowList).collect(Collectors.toList());
+        List<FollowListResponseDto> list = new ArrayList<>();
+        followers.forEach(o->list.add(o.getFollowing().memberToFollowList()));
+        return list;
     }
 
     @Transactional
@@ -44,10 +43,10 @@ public class MemberService {
         Member follower = memberRepository.findById(Long.parseLong(principal.getName())).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 memberId =" + Long.parseLong(principal.getName())));
         Member following = memberRepository.findByNickname(nickname).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 nickname =" + nickname));
 
-        if(followRepository.findByFollowingAndAndFollower(following.getId(), follower).isPresent()){
+        if(followRepository.findByFollowingAndAndFollower(following, follower).isPresent()){
             throw new IllegalArgumentException("이미 팔로우한 회원입니다.");
         }
-        Follower follow = new Follower(follower, following.getId());
+        Follower follow = new Follower(follower, following);
 
         return followRepository.save(follow).getId();
     }
@@ -56,7 +55,7 @@ public class MemberService {
     public Long deleteFollow(String nickname, Principal principal){
         Member follower = memberRepository.findById(Long.parseLong(principal.getName())).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 memberId =" + Long.parseLong(principal.getName())));
         Member following = memberRepository.findByNickname(nickname).orElseThrow(() -> new IllegalArgumentException("유저 로드 오류 nickname =" + nickname));
-        Follower follow = followRepository.findByFollowingAndAndFollower(following.getId(),follower).orElseThrow(()-> new IllegalArgumentException("불가능한 요청입니다."));
+        Follower follow = followRepository.findByFollowingAndAndFollower(following,follower).orElseThrow(()-> new IllegalArgumentException("불가능한 요청입니다."));
         followRepository.deleteAllById(follow.getId());
         return follow.getId();
     }
@@ -78,7 +77,7 @@ public class MemberService {
         member.setNickname(nickname);
         memberRepository.save(member);
 
-       return new MemberResponseDto(member);
+        return new MemberResponseDto(member);
     }
     @Transactional
     public Long changePassword(PasswordRequestDto passwordRequestDto, Long id) throws Exception {
