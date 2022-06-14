@@ -17,7 +17,10 @@ public class Follower {
     @Column(name = "follow_id")
     private Long id;
 
-    private Long following; //memberId
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="following")
+    private Member following; //memberId
 
     @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY)
@@ -28,7 +31,7 @@ public class Follower {
 
     }
 
-    public Follower(Member follower, Long following){
+    public Follower(Member follower, Member following){
         this.following = following;
         this.follower = follower;
     }
